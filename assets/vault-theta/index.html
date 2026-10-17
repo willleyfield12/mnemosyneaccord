@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vault Theta · Arrival</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#02090d;color:#eafaff;font:16px/1.5 system-ui,sans-serif}main{min-height:100svh;display:grid;place-items:center}.stage{position:relative;width:min(100%,1600px);aspect-ratio:16/9;overflow:hidden;background:#03131e}.scene{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}video{opacity:0;transition:opacity .2s}.playing video{opacity:1}.arrived video{opacity:0}.shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,8,13,.94),rgba(0,8,13,.12) 75%);pointer-events:none}.content{position:absolute;left:7%;bottom:9%;right:7%}.eyebrow{font-size:clamp(.6rem,1.1vw,.9rem);letter-spacing:.28em;color:#9bd8e6;margin:0 0 .6em}h1{font-size:clamp(1.8rem,5.7vw,5rem);line-height:1;margin:.2em 0 .3em;font-weight:400;letter-spacing:.04em}.content p{margin:.5em 0 1.3em;font-size:clamp(.8rem,1.4vw,1.1rem)}.links{display:flex;gap:12px;flex-wrap:wrap}a,button{color:inherit;font:inherit;border:1px solid #82bdce;background:#08202bcc;padding:.7em 1.3em;border-radius:3px;text-decoration:none;cursor:pointer}a:hover,button:hover{background:#124052}a:focus-visible,button:focus-visible{outline:3px solid white;outline-offset:4px}.landing{opacity:0;transform:translateY(8px);transition:opacity 1s,transform 1s;visibility:hidden}.arrived .landing{opacity:1;transform:none;visibility:visible}.playing .intro,.arrived .intro{display:none}.skip{position:absolute;right:4%;top:5%;font-size:.85rem;display:none}.playing .skip{display:block}.replay{margin-top:1.5em;font-size:.75rem;padding:.3em .6em;background:transparent;border-color:#4f7785}.status{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}[hidden]{display:none!important}@media(prefers-reduced-motion:reduce){*{transition:none!important}}@media(max-width:600px){main{min-height:100svh}.stage{aspect-ratio:auto;height:100svh}.scene{object-fit:cover}.content{left:7%;bottom:12%}h1{font-size:2.7rem}.content p{font-size:1rem}.eyebrow{font-size:.7rem}}
+</style>
+<main><section class="stage" aria-label="Arrival at Vault Theta">
+<picture><source srcset="vault-theta-final.webp" type="image/webp"><img class="scene" src="vault-theta-final.png" alt="Blue-lit rocky tunnel leading to a circular entrance"></picture>
+<video class="scene" playsinline preload="metadata" poster="arrival-source.png" aria-label="Kepler III descent and composited hatch opening"><source src="kepler-to-vault.mp4" type="video/mp4"></video>
+<div class="shade"></div>
+<div class="content intro"><p class="eyebrow">KEPLER-III · TRANSFER POD</p><h1>Destination: Vault Theta</h1><p>Your descent to the vault begins here.</p><button id="start">Begin descent</button> <button id="direct">Go to the vault</button></div>
+<div class="content landing" inert><p class="eyebrow">KEPLER-III · ARRIVAL COMPLETE</p><h1>VAULT THETA</h1><p>Your achievements await.</p><nav class="links" aria-label="Vault destinations"><a href="/rewards">Rewards <span aria-hidden="true">↗</span></a><a href="/hall-of-fame">Hall of Fame <span aria-hidden="true">↗</span></a></nav><button class="replay" id="replay">Replay journey</button></div>
+<button class="skip" id="skip">Skip journey</button><p class="status" role="status" aria-live="polite"></p>
+</section></main>
+<noscript><style>.intro{display:none}.landing{opacity:1;transform:none;visibility:visible}</style><p>Visit <a href="/rewards">Rewards</a> or the <a href="/hall-of-fame">Hall of Fame</a>.</p></noscript>
+<script>
+const stage=document.querySelector('.stage'),video=document.querySelector('video'),landing=document.querySelector('.landing'),status=document.querySelector('.status');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+let running=false,shown=false;
+function reveal(focus=false){if(shown)return;shown=true;landing.inert=false;stage.classList.add('arrived');stage.classList.remove('playing');status.textContent='Arrived at Vault Theta. Rewards and Hall of Fame are available.';if(focus)landing.querySelector('a').focus();}
+function finish(){video.pause();running=false;reveal(true);}
+async function play(){if(reduce.matches){finish();return}shown=false;running=true;landing.inert=true;stage.classList.remove('arrived');stage.classList.add('playing');video.currentTime=0;video.muted=false;status.textContent='Descending to Vault Theta.';document.querySelector('#skip').focus();try{await video.play()}catch{finish()}}
+video.addEventListener('timeupdate',()=>{if(running&&video.currentTime>=17.45){reveal(false)}});
+video.addEventListener('ended',()=>{running=false;reveal(false);if(document.activeElement.id==='skip')landing.querySelector('a').focus()});
+video.addEventListener('error',()=>{status.textContent='Video unavailable. Vault destinations are ready.';finish()});
+document.querySelector('#start').onclick=play;document.querySelector('#replay').onclick=play;document.querySelector('#skip').onclick=finish;document.querySelector('#direct').onclick=finish;
+reduce.addEventListener('change',e=>{if(e.matches)finish()});if(reduce.matches)reveal(false);
+</script></html>

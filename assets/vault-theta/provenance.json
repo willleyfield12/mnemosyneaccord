@@ -1,0 +1,22 @@
+{
+  "descent_frames": 361,
+  "extension_frames": 121,
+  "last_usable_descent_frame": 352,
+  "black_starts_frame": 353,
+  "fps": 24,
+  "cut_seconds": 14.708333333333334,
+  "composite_starts": 14.708333333333334,
+  "fully_open_seconds": 17.408333333333335,
+  "duration": 19.708333333333332,
+  "final_source": {
+    "file": "extension.mp4",
+    "frame": 100,
+    "crop": [
+      408,
+      78,
+      872,
+      339
+    ]
+  },
+  "new_generated_scenery": false
+}

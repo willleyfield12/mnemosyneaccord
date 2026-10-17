@@ -1,0 +1,11 @@
+{
+  "frame_count": 473,
+  "dimensions": [
+    1280,
+    720
+  ],
+  "minimum_frame_mean": 8.10817165798611,
+  "join_mean_absolute_error": 0.03306170428240741,
+  "final_png_mean_absolute_error": 1.321124855324074,
+  "held_frames_identical": false
+}
