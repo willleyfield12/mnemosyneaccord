@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Access Node // Mnemosyne Accord</title>
+  <style>
+    :root {
+      --bg: #020304;
+      --panel: rgba(10, 12, 16, 0.84);
+      --panel-2: rgba(14, 17, 22, 0.92);
+      --line: rgba(170, 226, 255, 0.22);
+      --line-strong: rgba(170, 226, 255, 0.48);
+      --text: #d7ebf5;
+      --muted: #7f9eab;
+      --glow: #9ed9ff;
+      --warning: #ffe6a7;
+      --success: #b8ffd8;
+      --shadow: 0 0 18px rgba(158, 217, 255, 0.14), 0 0 48px rgba(158, 217, 255, 0.06);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --font: "IBM Plex Mono", "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(110, 174, 219, 0.09), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(130, 210, 255, 0.05), transparent 18%),
+        linear-gradient(180deg, #05070a 0%, #020304 100%);
+      color: var(--text);
+      font-family: var(--font);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(to bottom,
+          rgba(255, 255, 255, 0.03) 0,
+          rgba(255, 255, 255, 0.03) 1px,
+          transparent 2px,
+          transparent 4px);
+      opacity: 0.08;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 40px 20px 64px;
+    }
+
+    .stage {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(18, 24, 32, 0.9), rgba(10, 12, 16, 0.92));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(160, 220, 255, 0.06), transparent 35%, transparent 65%, rgba(160, 220, 255, 0.03));
+      pointer-events: none;
+    }
+
+    .header {
+      padding: 28px 28px 18px;
+      border-bottom: 1px solid rgba(170, 226, 255, 0.12);
+      position: relative;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 52px);
+      letter-spacing: 0.05em;
+      line-height: 1.04;
+      text-transform: uppercase;
+      color: #e7f7ff;
+      text-shadow: 0 0 14px rgba(158, 217, 255, 0.25);
+    }
+
+    .subcopy {
+      margin: 14px 0 0;
+      max-width: 62ch;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .left-inner {
+      padding: 24px 28px 28px;
+    }
+
+    .status-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid rgba(170, 226, 255, 0.12);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(158, 217, 255, 0.75);
+      box-shadow: 0 0 10px rgba(158, 217, 255, 0.5);
+    }
+
+    .grid-shell {
+      position: relative;
+      border: 1px dashed rgba(170, 226, 255, 0.18);
+      border-radius: 16px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .grid-label {
+      margin: 0 0 14px;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .fragment-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .fragment-card {
+      min-height: 132px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(170, 226, 255, 0.16);
+      background: linear-gradient(180deg, rgba(17, 22, 29, 0.94), rgba(9, 11, 15, 0.96));
+      padding: 16px 16px 18px;
+      cursor: grab;
+      user-select: none;
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease, background 180ms ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fragment-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(170, 226, 255, 0.32);
+      box-shadow: 0 0 18px rgba(158, 217, 255, 0.08);
+    }
+
+    .fragment-card.dragging {
+      opacity: 0.65;
+      cursor: grabbing;
+      transform: scale(1.01);
+    }
+
+    .fragment-card::before {
+      content: attr(data-key);
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 11px;
+      color: rgba(158, 217, 255, 0.5);
+      letter-spacing: 0.14em;
+    }
+
+    .fragment-card p {
+      margin: 0;
+      color: #cfe8f4;
+      line-height: 1.62;
+      font-size: 14px;
+      max-width: 31ch;
+    }
+
+    .fragment-card .index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1px solid rgba(170, 226, 255, 0.18);
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-size: 12px;
+    }
+
+    .hint-row {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      appearance: none;
+      border: 1px solid rgba(170, 226, 255, 0.22);
+      background: rgba(255, 255, 255, 0.03);
+      color: #d9eef8;
+      font: inherit;
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 11px;
+      transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    button:hover {
+      background: rgba(170, 226, 255, 0.08);
+      border-color: rgba(170, 226, 255, 0.38);
+      transform: translateY(-1px);
+    }
+
+    .side {
+      padding: 28px;
+      min-height: 100%;
+      display: grid;
+      gap: 18px;
+    }
+
+    .monitor {
+      padding: 18px;
+      border: 1px solid rgba(170, 226, 255, 0.14);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .monitor h2,
+    .unlock-panel h2 {
+      margin: 0 0 14px;
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .monitor-lines {
+      display: grid;
+      gap: 10px;
+    }
+
+    .monitor-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(170, 226, 255, 0.08);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .monitor-line strong {
+      color: #def2fb;
+      font-weight: 500;
+    }
+
+    .aegis-shell {
+      position: relative;
+      min-height: 280px;
+      display: grid;
+      place-items: center;
+      padding: 10px 10px 4px;
+      isolation: isolate;
+    }
+
+    .aegis-shell::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(170, 226, 255, 0.08);
+      box-shadow: inset 0 0 35px rgba(158, 217, 255, 0.03);
+    }
+
+    .aegis-eye {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 1px solid rgba(170, 226, 255, 0.24);
+      box-shadow:
+        0 0 16px rgba(158, 217, 255, 0.08),
+        0 0 46px rgba(158, 217, 255, 0.06),
+        inset 0 0 24px rgba(158, 217, 255, 0.06);
+      background: radial-gradient(circle at center, rgba(164, 224, 255, 0.08), transparent 60%);
+      transition: filter 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .aegis-eye::before,
+    .aegis-eye::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(170, 226, 255, 0.14);
+      border-radius: 50%;
+      animation: spin 14s linear infinite;
+    }
+
+    .aegis-eye::after {
+      inset: 34px;
+      animation: spin-reverse 10s linear infinite;
+    }
+
+    .aegis-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 42px;
+      height: 42px;
+      margin-left: -21px;
+      margin-top: -21px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #ecfbff 0%, #bde8ff 30%, rgba(189, 232, 255, 0.7) 46%, rgba(189, 232, 255, 0.12) 70%, transparent 100%);
+      box-shadow: 0 0 18px rgba(189, 232, 255, 0.7), 0 0 34px rgba(189, 232, 255, 0.32);
+      transition: transform 120ms linear, box-shadow 180ms ease;
+    }
+
+    .aegis-eye.focused {
+      filter: brightness(1.12);
+      transform: scale(1.03);
+      box-shadow:
+        0 0 18px rgba(158, 217, 255, 0.12),
+        0 0 52px rgba(158, 217, 255, 0.10),
+        inset 0 0 28px rgba(158, 217, 255, 0.08);
+    }
+
+    .aegis-eye.warning {
+      filter: brightness(1.18);
+    }
+
+    .aegis-message {
+      margin-top: 18px;
+      min-height: 46px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(170, 226, 255, 0.12);
+      background: rgba(255, 255, 255, 0.02);
+      color: #d9edf8;
+      font-size: 12px;
+      line-height: 1.55;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.92;
+    }
+
+    .unlock-panel {
+      display: none;
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(184, 255, 216, 0.18);
+      background: linear-gradient(180deg, rgba(16, 24, 21, 0.82), rgba(8, 14, 12, 0.92));
+      box-shadow: 0 0 22px rgba(184, 255, 216, 0.08);
+    }
+
+    .unlock-panel.visible {
+      display: block;
+      animation: rise 320ms ease;
+    }
+
+    .unlock-panel p {
+      margin: 0 0 16px;
+      color: #b7d9c8;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .unlock-title {
+      color: var(--success);
+      margin-bottom: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      flex: 1 1 220px;
+      min-width: 0;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(184, 255, 216, 0.14);
+      background: rgba(255, 255, 255, 0.03);
+      color: #effff7;
+      font: inherit;
+      outline: none;
+      transition: border-color 140ms ease, box-shadow 140ms ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: rgba(184, 255, 216, 0.32);
+      box-shadow: 0 0 0 4px rgba(184, 255, 216, 0.06);
+    }
+
+    .small-note {
+      margin-top: 12px;
+      color: rgba(184, 255, 216, 0.66);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .footer-note {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .error-flash {
+      animation: warningFlash 440ms ease;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin-reverse {
+      from {
+        transform: rotate(360deg);
+      }
+
+      to {
+        transform: rotate(0deg);
+      }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes warningFlash {
+      0% {
+        box-shadow: var(--shadow);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(255, 214, 140, 0.14), 0 0 52px rgba(255, 214, 140, 0.08);
+      }
+
+      100% {
+        box-shadow: var(--shadow);
+      }
+    }
+
+    @media (max-width: 960px) {
+      .stage {
+        grid-template-columns: 1fr;
+      }
+
+      .aegis-shell {
+        min-height: 220px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        padding: 20px 14px 40px;
+      }
+
+      .header,
+      .left-inner,
+      .side {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .fragment-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .aegis-eye {
+        width: 130px;
+        height: 130px;
+      }
+
+      .aegis-core {
+        width: 34px;
+        height: 34px;
+        margin-left: -17px;
+        margin-top: -17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <section class="stage">
+      <div class="panel">
+        <header class="header">
+          <div class="eyebrow">Mnemosyne Accord // Access Node</div>
+          <h1>Memory Reconstruction Instance</h1>
+          <p class="subcopy">
+            Recovered sequence integrity has degraded below acceptable threshold. Reconstruct the fragment order
+            manually. A stabilised recall pathway may permit deeper access.
+          </p>
+        </header>
+
+        <div class="left-inner">
+          <div class="status-bar">
+            <div class="pill"><span class="pill-dot"></span>Unauthorised Observer</div>
+            <div class="pill"><span class="pill-dot"></span>Cycle Drift Detected</div>
+            <div class="pill"><span class="pill-dot"></span>Judicial Cache Unsealed</div>
+          </div>
+
+          <div class="grid-shell panel-surface" id="gridShell">
+            <p class="grid-label">Drag fragments into narrative order</p>
+
+            <div class="fragment-grid" id="fragmentGrid">
+              <article class="fragment-card" draggable="true" data-key="A">
+                <div class="index">01</div>
+                <p>She said it was not the first time the station had tried to remember her incorrectly.</p>
+              </article>
+
+              <article class="fragment-card" draggable="true" data-key="B">
+                <div class="index">02</div>
+                <p>The door behind her had already sealed, though no command had been given.</p>
+              </article>
+
+              <article class="fragment-card" draggable="true" data-key="C">
+                <div class="index">03</div>
+                <p>Her hand shook around the comm unit as though the metal itself had become afraid.</p>
+              </article>
+
+              <article class="fragment-card" draggable="true" data-key="D">
+                <div class="index">04</div>
+                <p>“You left me here,” came the voice, quiet as frost forming on glass.</p>
+              </article>
+
+              <article class="fragment-card" draggable="true" data-key="E">
+                <div class="index">05</div>
+                <p>But the corridor beyond the observation pane was empty of everyone except memory.</p>
+              </article>
+
+              <article class="fragment-card" draggable="true" data-key="F">
+                <div class="index">06</div>
+                <p>Not empty enough, she thought, because something on the other side had just opened its eye.</p>
+              </article>
+            </div>
+
+            <div class="hint-row">
+              <div>
+                Sequence confidence increases when cause precedes recognition and recognition precedes accusation.
+              </div>
+              <div class="button-row">
+                <button type="button" id="checkOrderBtn">Check Sequence</button>
+                <button type="button" id="resetBtn">Reset Order</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel side">
+        <section class="monitor">
+          <h2>Recovery Monitor</h2>
+          <div class="monitor-lines">
+            <div class="monitor-line"><span>Observer Status</span><strong>Unverified</strong></div>
+            <div class="monitor-line"><span>Memory Integrity</span><strong id="integrityValue">41%</strong></div>
+            <div class="monitor-line"><span>Fragment Order</span><strong id="orderValue">Unstable</strong></div>
+            <div class="monitor-line"><span>Judgement Layer</span><strong>Watching</strong></div>
+          </div>
+        </section>
+
+        <section class="monitor">
+          <h2>Aegis Presence</h2>
+          <div class="aegis-shell">
+            <div class="aegis-eye" id="aegisEye" aria-hidden="true">
+              <div class="aegis-core" id="aegisCore"></div>
+            </div>
+          </div>
+          <div class="aegis-message" id="aegisMessage">Unauthorised memory access detected.</div>
+          <div class="footer-note">The eye responds to movement, correction, and defiance.</div>
+        </section>
+
+        <section class="unlock-panel" id="unlockPanel">
+          <div class="unlock-title">Reconstruction Successful</div>
+          <h2>Identity Verification</h2>
+          <p>
+            The sequence has stabilised. One final confirmation remains. Who was the one left behind?
+          </p>
+          <div class="input-row">
+            <input type="text" id="identityInput" autocomplete="off" spellcheck="false" placeholder="Enter identity" />
+            <button type="button" id="submitIdentityBtn">Verify</button>
+          </div>
+          <div class="small-note">Accepted response permits continuation to the Oblivian layer.</div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const correctOrder = ["A", "C", "B", "D", "E", "F"];
+    const startingOrder = ["A", "B", "C", "D", "E", "F"];
+    const redirectTarget = "/oblivian/";
+
+    const grid = document.getElementById("fragmentGrid");
+    const cards = () => Array.from(grid.querySelectorAll(".fragment-card"));
+    const integrityValue = document.getElementById("integrityValue");
+    const orderValue = document.getElementById("orderValue");
+    const unlockPanel = document.getElementById("unlockPanel");
+    const identityInput = document.getElementById("identityInput");
+    const aegisEye = document.getElementById("aegisEye");
+    const aegisCore = document.getElementById("aegisCore");
+    const aegisMessageBox = document.getElementById("aegisMessage");
+    const gridShell = document.getElementById("gridShell");
+
+    let draggedCard = null;
+    let deletionTimer = null;
+    let warningCount = 0;
+
+    function getOrder() {
+      return cards().map(card => card.dataset.key);
+    }
+
+    function updateIndexes() {
+      cards().forEach((card, index) => {
+        const badge = card.querySelector('.index');
+        badge.textContent = String(index + 1).padStart(2, '0');
+      });
+    }
+
+    function similarityScore(order) {
+      let matches = 0;
+      order.forEach((item, i) => {
+        if (item === correctOrder[i]) matches++;
+      });
+      return matches;
+    }
+
+    function updateMonitor() {
+      const order = getOrder();
+      const matches = similarityScore(order);
+      const percent = 41 + matches * 9;
+      integrityValue.textContent = `${percent}%`;
+      orderValue.textContent = matches === 6 ? "Stable" : matches >= 4 ? "Resolving" : matches >= 2 ? "Unstable" : "Compromised";
+    }
+
+    function message(text) {
+      aegisMessageBox.textContent = text;
+    }
+
+    function focusEye() {
+      aegisEye.classList.add('focused');
+      clearTimeout(aegisEye._focusTimer);
+      aegisEye._focusTimer = setTimeout(() => aegisEye.classList.remove('focused'), 900);
+    }
+
+    function warnEye(text) {
+      aegisEye.classList.add('warning');
+      gridShell.classList.add('error-flash');
+      message(text);
+      clearTimeout(aegisEye._warningTimer);
+      aegisEye._warningTimer = setTimeout(() => {
+        aegisEye.classList.remove('warning');
+        gridShell.classList.remove('error-flash');
+      }, 1200);
+    }
+
+    function attachDragEvents(card) {
+      card.addEventListener('dragstart', () => {
+        draggedCard = card;
+        card.classList.add('dragging');
+      });
+
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        draggedCard = null;
+        updateMonitor();
+      });
+
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (!draggedCard || draggedCard === card) return;
+
+        const all = cards();
+        const draggedIndex = all.indexOf(draggedCard);
+        const targetIndex = all.indexOf(card);
+
+        if (draggedIndex < targetIndex) {
+          grid.insertBefore(draggedCard, card.nextSibling);
+        } else {
+          grid.insertBefore(draggedCard, card);
+        }
+
+        updateIndexes();
+        updateMonitor();
+        focusEye();
+      });
+    }
+
+    cards().forEach(attachDragEvents);
+
+    document.addEventListener('mousemove', (e) => {
+      const x = ((e.clientX / window.innerWidth) - 0.5) * 12;
+      const y = ((e.clientY / window.innerHeight) - 0.5) * 12;
+      aegisCore.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    function resetOrder() {
+      startingOrder.forEach(key => {
+        const card = grid.querySelector(`[data-key="${key}"]`);
+        grid.appendChild(card);
+      });
+      updateIndexes();
+      updateMonitor();
+      message('Sequence reset. Begin again.');
+      focusEye();
+    }
+
+    function checkOrder() {
+      const currentOrder = getOrder();
+      const isCorrect = JSON.stringify(currentOrder) === JSON.stringify(correctOrder);
+
+      if (isCorrect) {
+        message('Memory accepted. Identity verification required.');
+        focusEye();
+        unlockPanel.classList.add('visible');
+        orderValue.textContent = 'Stable';
+        integrityValue.textContent = '95%';
+        if (window.localStorage) {
+          localStorage.setItem('access_node_sequence', 'complete');
+        }
+        identityInput.focus();
+        return;
+      }
+
+      warningCount += 1;
+
+      if (warningCount >= 3) {
+        warnEye('Pattern deviation persists. Look again.');
+      } else {
+        warnEye('Sequence rejected. Reconstruction incomplete.');
+      }
+    }
+
+    function absoluteDeletion() {
+      try {
+        localStorage.clear();
+      } catch (err) {
+        // ignored
+      }
+      message('Judgement: absolute deletion.');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1700);
+    }
+
+    function verifyIdentity() {
+      const value = identityInput.value.trim().toLowerCase();
+
+      if (value === 'ophelia' || value === 'ophelia fox') {
+        message('Identity accepted. Oblivian layer opening.');
+        focusEye();
+        try {
+          localStorage.setItem('access_node_complete', 'true');
+        } catch (err) {
+          // ignored
+        }
+        setTimeout(() => {
+          window.location.href = redirectTarget;
+        }, 1100);
+        return;
+      }
+
+      warningCount += 1;
+
+      if (warningCount >= 5) {
+        message('Unauthorised manipulation detected.');
+        clearTimeout(deletionTimer);
+        deletionTimer = setTimeout(absoluteDeletion, 900);
+      } else {
+        warnEye('Identity mismatch. Memory remains sealed.');
+      }
+    }
+
+    document.getElementById('checkOrderBtn').addEventListener('click', checkOrder);
+    document.getElementById('resetBtn').addEventListener('click', resetOrder);
+    document.getElementById('submitIdentityBtn').addEventListener('click', verifyIdentity);
+
+    identityInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') verifyIdentity();
+    });
+
+    updateIndexes();
+    updateMonitor();
+
+    setTimeout(() => {
+      message('Reconstruct the memory. You were not meant to see it.');
+    }, 700);
+  </script>
+</body>
+
+</html>
