@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIMELINE / LOGS</title>
+    <link rel="stylesheet" href="/css/protocol.css?v=uppercase-titles">
+
+    <style>
+        .log-shell {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .timeline-panel {
+            border: 1px solid rgba(10, 255, 209, 0.28);
+            background: rgba(0, 0, 0, 0.52);
+            backdrop-filter: blur(4px);
+            padding: 18px;
+            margin-bottom: 18px;
+        }
+
+        .timeline-kicker {
+            font-size: 11px;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            margin-bottom: 10px;
+        }
+
+        .timeline-entry {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 18px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(10, 255, 209, 0.12);
+        }
+
+        .timeline-stamp {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            opacity: 0.8;
+        }
+
+        .timeline-body {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .timeline-body strong {
+            letter-spacing: 1px;
+        }
+
+        .timeline-glitch {
+            color: #c38cff;
+            opacity: 0.85;
+        }
+
+        .return-row {
+            margin-top: 18px;
+        }
+
+        .return-link {
+            display: inline-block;
+            text-decoration: none;
+            color: #0affd1;
+            border: 1px solid rgba(10, 255, 209, 0.25);
+            background: rgba(0, 0, 0, 0.45);
+            padding: 10px 14px;
+            letter-spacing: 1.5px;
+            font-size: 11px;
+        }
+
+        .return-link:hover {
+            box-shadow: 0 0 10px rgba(10, 255, 209, 0.2);
+        }
+
+        @media (max-width: 800px) {
+            .timeline-entry {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
+<link rel="stylesheet" href="/css/archive-sections.css">
+<link rel="stylesheet" href="/css/memory-archive.css?v=datapad-consistent-2">
+<script>if(window.self!==window.top)document.documentElement.classList.add('archive-embedded');</script>
+</head>
+
+<body class="memory-archive"><header class="archive-systembar"><a href="/station/">DAEDALUS // MEMORY ARCHIVE</a><span>RECORD TERMINAL / MISSION</span></header>
+
+    <div class="wrapper">
+
+        
+
+        <div class="content site-shell">
+            <p class="eyebrow">Daedalus // Mission continuity</p><h1 class="title">Timeline / Logs</h1>
+
+            <div class="log-shell">
+
+                <div class="timeline-panel">
+                    <div class="timeline-kicker">MISSION SEQUENCE // ACTIVE ROTATION</div>
+
+                    <div class="timeline-entry">
+                        <div class="timeline-stamp">T+000 // ARRIVAL</div>
+                        <div class="timeline-body">
+                            <strong>Kepler-III orbital cycle resumed.</strong><br>
+                            Crew transfer, station access, and systems continuity checks initiated.
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry">
+                        <div class="timeline-stamp">T+011 // BASELINE</div>
+                        <div class="timeline-body">
+                            <strong>Station diagnostics nominal.</strong><br>
+                            Cryogenic assets, command pathways, and science modules recorded within expected tolerances.
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry">
+                        <div class="timeline-stamp">T+038 // FIRST VARIANCE</div>
+                        <div class="timeline-body">
+                            <strong>Minor behavioural and routing discrepancies observed.</strong><br>
+                            Internal inconsistencies not escalated beyond local concern at this stage.
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry">
+                        <div class="timeline-stamp">T+052 // RECORD MISMATCH</div>
+                        <div class="timeline-body">
+                            <strong>Mission logs show version drift.</strong><br>
+                            Archive output no longer matches manual recollection in all cases.
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry">
+                        <div class="timeline-stamp">T+071 // COGNITIVE REVIEW</div>
+                        <div class="timeline-body">
+                            <strong>Memory continuity concerns broaden.</strong><br>
+                            Shared events begin producing conflicting witness statements without stable resolution.
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry">
+                        <div class="timeline-stamp">T+089 // RESTRICTED FLAG</div>
+                        <div class="timeline-body">
+                            <strong>Unlisted structural impressions reported.</strong><br>
+                            Brief references to non-authorised routes, levels, or thresholds appear in fragmented
+                            reports.
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry">
+                        <div class="timeline-stamp timeline-glitch">T+089 // T+089 // T+089</div>
+                        <div class="timeline-body">
+                            <strong class="timeline-glitch">Sequence instability detected.</strong><br>
+                            Event order may no longer be strictly reliable. Redundant preservation of contradictory
+                            records advised.
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="return-row">
+                    <a class="return-link" href="../mission/index.html">RETURN TO MISSION LOG</a>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="site-footer"><a href="/aegis/submit.html">Submit</a><a data-archive aria-disabled="true" style="opacity:.45">Archive Access</a><a href="/aegis/channel.html">Direct Channel</a></footer>
+
+    </div>
+
+<script type="module">import {readState,syncNav} from "/assets/js/protocol.js?v=progression-12";readState().then(s=>{syncNav(s);document.querySelectorAll("[data-archive]").forEach(a=>a.style.opacity="1")}).catch(()=>{});</script></body>
+
+</html>

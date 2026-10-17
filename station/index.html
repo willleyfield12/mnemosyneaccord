@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Docking Bay // Daedalus Memory Archive</title>
+<link rel="stylesheet" href="/css/protocol.css?v=uppercase-titles">
+<link rel="stylesheet" href="/css/docking-hub.css?v=datapad-consistent-2">
+</head>
+<body class="docking-hub">
+<script>document.body.classList.add('arrival-loading');window.dockArrivalFallback=setTimeout(function(){document.body.classList.remove('arrival-loading');document.querySelectorAll('[data-arrival-gated]').forEach(function(el){el.inert=false});},15000);</script>
+<button id="skip-arrival" class="skip-arrival" type="button" hidden>Skip arrival sequence →</button>
+<p id="arrival-status" class="arrival-sr" role="status" aria-live="polite"></p>
+<header class="dock-header"><a href="/" class="series-link">THE MNEMOSYNE ACCORD</a><span>BOOK I // OBLIVIA</span></header>
+<main class="dock-layout">
+ <section class="dock-scene" aria-label="Primary Docking Bay">
+  <img class="dock-image" src="/assets/images/rooms/primary-docking-port.png" alt="Daedalus secured in Kepler III’s docking bay, with Europa beyond the hull.">
+  <div class="dock-shade" aria-hidden="true"></div>
+  <div class="dock-label"><p class="eyebrow">KEPLER III // DECK 6</p><h1>Primary Docking Bay</h1><p class="dock-caption">The clamps are holding. The station is waiting.</p></div>
+  <div class="dock-entry"><p class="eyebrow">AEGIS // STATION ENTRY</p><h2>Your arrival has been noticed.</h2><p id="entry-copy">Enter the station, or consult the datapad before you present yourself.</p><button id="enter-station" class="primary" type="button">Enter Kepler III <span aria-hidden="true">→</span></button><p id="entry-note">AEGIS will request a transmission address before admitting you.</p><p id="status" class="error" role="status" aria-live="polite"></p></div>
+ </section>
+ <aside class="datapad" aria-labelledby="datapad-title">
+  <div class="pad-hardware"><span>DAEDALUS // FIELD TERMINAL</span><span class="pad-light" aria-label="Terminal active"></span></div>
+  <div class="pad-screen">
+   <div id="pad-boot" hidden aria-label="Datapad operating system startup"><p>DAEDALUS // MEMORY OS</p><pre id="pad-boot-lines"></pre></div>
+   <div id="pad-menu">
+   <p class="eyebrow">Memory infrastructure</p><h2 id="datapad-title">Daedalus<br>Memory Archive</h2><p id="clearance" class="pad-clearance">OBSERVER UNDETECTED</p>
+   <p class="pad-copy">Records survive. Their agreement is less certain.</p>
+   <nav class="pad-records" aria-label="Datapad research records">
+    <a href="/mission/"><span class="record-number" aria-hidden="true">01</span><span><strong>Mission Log</strong><small>Directives, incidents, and continuity.</small></span><span aria-hidden="true">↗</span></a>
+    <a href="/crew/"><span class="record-number" aria-hidden="true">02</span><span><strong>Crew Records</strong><small>Personnel files and witness accounts.</small></span><span aria-hidden="true">↗</span></a>
+    <a href="/jovian-system/"><span class="record-number" aria-hidden="true">03</span><span><strong>Jovian System</strong><small>Europa, Kepler III, and the ice below.</small></span><span aria-hidden="true">↗</span></a>
+   </nav>
+   </div>
+   <section id="terminal-record" hidden aria-label="Open archive record">
+    <div class="terminal-toolbar"><button id="terminal-close" type="button">← Datapad</button><span id="terminal-title">Crew manifest</span><button id="terminal-index" type="button">Record index</button></div>
+    <iframe id="terminal-frame" title="Daedalus archive records"></iframe>
+   </section>
+   <nav class="pad-utilities" aria-label="AEGIS protocols"><a href="/aegis/submit.html">Submit</a><a href="/archive/" data-archive aria-disabled="false">Archive Access</a><a href="/aegis/channel.html">Direct Channel</a></nav>
+   <p class="pad-footnote">The archive is available before station entry. Restricted records respond to clearance.</p>
+  </div>
+  <div class="pad-base" aria-hidden="true"><span></span><i></i><span></span></div>
+ </aside>
+</main>
+<dialog id="detection" aria-labelledby="detection-title">
+ <p class="eyebrow">AEGIS // DETECTION PROTOCOL</p><h2 id="detection-title">Submit or be forgotten.</h2><p>The docking seal requires a transmission address. Permit detection to enter Kepler III.</p>
+ <div class="preview-note">Local review mode: no email is sent and no external subscription is created. This records a preview observer only.</div>
+ <form id="dock-registration"><label for="dock-email">Transmission address</label><input id="dock-email" type="email" autocomplete="email" required><label class="consent-row"><input id="dock-consent" type="checkbox" required> I agree to receive clearance transmissions. I can request to be forgotten through Direct Channel.</label><div class="actions"><button class="primary" type="submit">Permit detection &amp; enter</button><button id="research-first" type="button">Research first</button></div><p id="detection-status" class="error" role="status" aria-live="polite"></p></form>
+</dialog>
+<script src="/assets/js/docking-arrival.js?v=datapad-consistent-2"></script>
+<script type="module" src="/assets/js/docking-hub.js?v=hall-access-10"></script>
+</body>
+</html>

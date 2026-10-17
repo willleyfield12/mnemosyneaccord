@@ -1,0 +1,12 @@
+.travelling-pad{background:linear-gradient(135deg,#22333d,#07171d)!important;border:1px solid #617079!important;border-radius:18px;padding:20px!important;box-shadow:inset 0 0 0 4px #152028}.travelling-pad h2{font:23px Georgia,serif}.travelling-pad .eyebrow{font-size:9px}.travelling-pad>#pad-archive{width:100%;margin:18px 0 10px}#travelling-archive{width:min(1120px,94vw);max-width:1120px;height:90svh;max-height:94svh;padding:22px;background:#07171d;border:5px solid #344750;border-radius:20px}#travelling-archive[open]{display:flex;flex-direction:column}.travelling-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px}.travelling-toolbar h2{font:22px Georgia,serif;margin:0}.travelling-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.travelling-tabs button,.travelling-tabs a{font:11px monospace;padding:10px}#travelling-frame{flex:1;width:100%;min-height:300px;border:1px solid #29434a;border-radius:8px;background:#07171d}#retained-position{font:11px monospace;color:var(--gold)}@media(max-width:600px){#travelling-archive{padding:12px}.travelling-toolbar{align-items:flex-start}.travelling-toolbar h2{font-size:18px}}
+#open-travelling-pad,#close-travelling-pad,#pad-archive,.travelling-tabs button,.travelling-tabs a,#pad-location,#retained-position,.travelling-pad>.button{text-transform:uppercase}
+
+#pad-location{font:10px/1.5 monospace;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#retained-position{font-size:10px;letter-spacing:0}
+
+.travelling-tabs .active{background:#173d39;border:1px solid var(--aqua);color:#a1f5df;text-decoration:none}
+
+/* Links and buttons share the same neutral tab appearance. */
+.travelling-tabs button,.travelling-tabs a{display:inline-block;background:#10272f;color:var(--text);border:1px solid var(--line);border-radius:4px;text-decoration:none}
+.travelling-tabs button:not(.active),.travelling-tabs a:not(.active){background:#10272f;color:var(--text);border-color:var(--line)}
+.travelling-tabs .active,.travelling-tabs [aria-current="page"]{background:#173d39;color:#a1f5df;border-color:var(--aqua)}

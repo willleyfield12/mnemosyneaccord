@@ -1,0 +1,16 @@
+#jovianSystem .viewport{min-height:0}#jovianSystem svg{width:100%;margin:0;max-width:100%}#moon-selector{display:flex;flex-wrap:wrap;gap:8px;padding:12px}#moon-selector button{font:11px monospace;padding:9px 12px}#buried-record{padding:16px;margin-top:18px;border:1px solid #b69aca;background:#1b1728;color:#e4d3f0;line-height:1.7}#buried-record[hidden]{display:none}.record-interference .readout{border-color:#b69aca!important;box-shadow:inset 3px 0 #80ead3,inset -3px 0 #b69aca}.record-interference .readout-kicker{color:#d2b4ed}#jovianSystem .body-node:focus{outline:none;filter:drop-shadow(0 0 7px #e9c78b)}#jovianSystem .hud{grid-template-columns:minmax(0,1.3fr) minmax(250px,1fr)}@media(max-width:900px){#jovianSystem .hud{grid-template-columns:1fr}#jovianSystem .system-board{padding:10px}} 
+
+#celestial-catalogue{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}#celestial-catalogue button{font:11px monospace;padding:9px 12px}
+
+#back-to-orbits[hidden]{display:none}#back-to-orbits{margin-bottom:24px;font:12px monospace;padding:12px 16px}
+#jovianSystem.info-card-mode .system-board{display:none}
+#jovianSystem.info-card-mode .hud{display:block}
+#jovianSystem.info-card-mode .readout{min-height:500px;padding:28px}
+#jovianSystem.info-card-mode .readout-title{font-size:36px}
+#jovianSystem.info-card-mode .readout-copy{font-size:16px;line-height:1.8;max-width:780px}
+#jovianSystem.info-card-mode .readout-list li{padding:14px 0;font-size:14px}
+#jovianSystem.info-card-mode #celestial-catalogue{display:none}
+#jovianSystem:not(.info-card-mode) .readout{display:none}
+#jovianSystem:not(.info-card-mode) .hud{display:block}
+#jovianSystem .system-board::after{content:'Select a body to open its full data card.';display:block;margin-top:16px;font:12px monospace;color:var(--gold)}
+@media(max-width:600px){#jovianSystem.info-card-mode .readout{padding:18px}}

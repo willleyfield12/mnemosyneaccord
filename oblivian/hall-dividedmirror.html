@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hall of Miragenesis // Mnemosyne Accord</title>
+    <style>
+        :root {
+            --bg: #050607;
+            --bg2: #0a0d10;
+            --gold: #f2e6b3;
+            --gold-line: rgba(232, 216, 162, 0.14);
+            --text: #f7f0d6;
+            --muted: #a9a8a0;
+            --cyan: rgba(130, 220, 255, 0.42);
+            --panel: rgba(13, 12, 12, 0.88);
+            --shadow: 0 0 24px rgba(130, 220, 255, 0.06), 0 0 70px rgba(232, 216, 162, 0.03);
+            --font: "IBM Plex Mono", "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            background:
+                radial-gradient(circle at 50% 18%, rgba(130, 220, 255, 0.08), transparent 22%),
+                radial-gradient(circle at 80% 30%, rgba(232, 216, 162, 0.05), transparent 20%),
+                linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+            color: var(--text);
+            font-family: var(--font);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 10% 18%, rgba(255, 255, 255, 0.45) 0 1px, transparent 1.8px),
+                radial-gradient(circle at 22% 70%, rgba(130, 220, 255, 0.25) 0 1px, transparent 1.8px),
+                radial-gradient(circle at 38% 26%, rgba(255, 255, 255, 0.35) 0 1px, transparent 1.8px),
+                radial-gradient(circle at 57% 78%, rgba(232, 216, 162, 0.22) 0 1px, transparent 1.8px),
+                radial-gradient(circle at 72% 20%, rgba(255, 255, 255, 0.32) 0 1px, transparent 1.8px),
+                radial-gradient(circle at 86% 60%, rgba(130, 220, 255, 0.18) 0 1px, transparent 1.8px);
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 0;
+            animation: drift 100s linear infinite;
+        }
+
+        @keyframes drift {
+            from {
+                transform: translate3d(0, 0, 0);
+            }
+
+            to {
+                transform: translate3d(-24px, 18px, 0);
+            }
+        }
+
+        .shell {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            padding: 22px;
+        }
+
+        .top-return {
+            max-width: 1280px;
+            margin: 0 auto 10px auto;
+        }
+
+        .top-return a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            border: 1px solid rgba(232, 216, 162, 0.18);
+            border-radius: 999px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+        }
+
+        .top-return a:hover {
+            background: rgba(130, 220, 255, 0.08);
+            border-color: rgba(130, 220, 255, 0.24);
+            transform: translateY(-1px);
+        }
+
+        .layout {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.02fr 0.98fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel {
+            position: relative;
+            border: 1px solid var(--gold-line);
+            border-radius: 22px;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(17, 15, 15, 0.88), rgba(10, 10, 11, 0.96));
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(130, 220, 255, 0.04), transparent 32%, transparent 70%, rgba(232, 216, 162, 0.02));
+            pointer-events: none;
+        }
+
+        .header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid rgba(232, 216, 162, 0.08);
+        }
+
+        .eyebrow {
+            margin-bottom: 10px;
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(28px, 4.6vw, 46px);
+            line-height: 1.04;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #fff8e3;
+            text-shadow: 0 0 14px rgba(130, 220, 255, 0.16);
+        }
+
+        .subcopy {
+            margin: 14px 0 0;
+            max-width: 62ch;
+            color: var(--muted);
+            line-height: 1.72;
+            font-size: 14px;
+        }
+
+        .left-inner {
+            padding: 18px 24px 24px;
+        }
+
+        .scene-panel {
+            position: relative;
+            min-height: 640px;
+            border-radius: 18px;
+            border: 1px dashed rgba(232, 216, 162, 0.10);
+            overflow: hidden;
+            background:
+                linear-gradient(180deg, rgba(8, 11, 14, 0.72), rgba(8, 8, 10, 0.92)),
+                radial-gradient(circle at 50% 35%, rgba(130, 220, 255, 0.08), transparent 22%);
+        }
+
+        .scene-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.015), transparent 22%),
+                radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.05), transparent 20%);
+            pointer-events: none;
+        }
+
+        .mirror-frame {
+            position: absolute;
+            left: 50%;
+            top: 44%;
+            transform: translate(-50%, -50%);
+            width: min(78%, 520px);
+            aspect-ratio: 0.9 / 1;
+            border-radius: 28px;
+            border: 1px solid rgba(232, 216, 162, 0.14);
+            background:
+                linear-gradient(180deg, rgba(18, 22, 28, 0.9), rgba(10, 12, 16, 0.96));
+            box-shadow:
+                inset 0 0 38px rgba(130, 220, 255, 0.06),
+                0 0 28px rgba(130, 220, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .mirror-frame::before {
+            content: "";
+            position: absolute;
+            inset: 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(232, 216, 162, 0.08);
+            pointer-events: none;
+        }
+
+        .mirror-sheen {
+            position: absolute;
+            inset: 22px;
+            border-radius: 18px;
+            background:
+                radial-gradient(circle at 50% 40%, rgba(130, 220, 255, 0.16), transparent 32%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 28%, transparent 62%, rgba(130, 220, 255, 0.06));
+            opacity: 0.9;
+            animation: sheen 9s ease-in-out infinite;
+        }
+
+        @keyframes sheen {
+
+            0%,
+            100% {
+                opacity: 0.65;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.95;
+                transform: scale(1.015);
+            }
+        }
+
+        .sigil-mark {
+            position: absolute;
+            left: 50%;
+            top: 18%;
+            transform: translateX(-50%);
+            width: 94px;
+            height: 94px;
+            object-fit: contain;
+            opacity: 0.92;
+            filter: drop-shadow(0 0 12px rgba(130, 220, 255, 0.18));
+        }
+
+        .relic-action-row {
+            position: absolute;
+            left: 50%;
+            top: calc(44% + 210px);
+            transform: translateX(-50%);
+            z-index: 3;
+        }
+
+        .trial-copy {
+            position: absolute;
+            left: 50%;
+            bottom: 34px;
+            transform: translateX(-50%);
+            width: min(86%, 520px);
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .side {
+            display: grid;
+            gap: 18px;
+            align-content: start;
+        }
+
+        .block {
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(232, 216, 162, 0.12);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .block h2 {
+            margin: 0 0 14px;
+            font-size: 13px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .prompt {
+            margin: 0 0 14px;
+            color: #e7dfc8;
+            line-height: 1.72;
+            font-size: 14px;
+        }
+
+        .choices {
+            display: grid;
+            gap: 10px;
+        }
+
+        .choice-btn {
+            width: 100%;
+            text-align: left;
+            border: 1px solid rgba(232, 216, 162, 0.16);
+            background: rgba(255, 255, 255, 0.02);
+            color: #f0e5c1;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font: inherit;
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            line-height: 1.55;
+            cursor: pointer;
+            transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+        }
+
+        .choice-btn:hover {
+            background: rgba(130, 220, 255, 0.06);
+            border-color: rgba(130, 220, 255, 0.22);
+            transform: translateY(-1px);
+        }
+
+        .choice-btn.correct {
+            border-color: rgba(130, 220, 255, 0.38);
+            background: rgba(130, 220, 255, 0.10);
+        }
+
+        .choice-btn.incorrect {
+            border-color: rgba(232, 216, 162, 0.20);
+            opacity: 0.66;
+        }
+
+        .status-line {
+            margin-top: 14px;
+            min-height: 40px;
+            color: #d7eefa;
+            font-size: 12px;
+            line-height: 1.6;
+            letter-spacing: 0.05em;
+        }
+
+        .input-wrap {
+            display: grid;
+            gap: 10px;
+        }
+
+        .relic-input {
+            width: 100%;
+            border: 1px solid rgba(232, 216, 162, 0.16);
+            background: rgba(255, 255, 255, 0.02);
+            color: #f7f0d6;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font: inherit;
+            font-size: 13px;
+        }
+
+        .relic-input:focus {
+            outline: none;
+            border-color: rgba(130, 220, 255, 0.28);
+            box-shadow: 0 0 0 2px rgba(130, 220, 255, 0.08);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            appearance: none;
+            border: 1px solid rgba(232, 216, 162, 0.18);
+            background: rgba(255, 255, 255, 0.02);
+            color: #f3e6bb;
+            padding: 11px 14px;
+            border-radius: 999px;
+            font: inherit;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, opacity 160ms ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            background: rgba(130, 220, 255, 0.08);
+            border-color: rgba(130, 220, 255, 0.24);
+        }
+
+        .btn.primary {
+            background: rgba(130, 220, 255, 0.10);
+            border-color: rgba(130, 220, 255, 0.24);
+        }
+
+        .aegis-eye-wrap {
+            min-height: 200px;
+            display: grid;
+            place-items: center;
+            position: relative;
+        }
+
+        .aegis-eye {
+            position: relative;
+            width: 132px;
+            height: 132px;
+            border-radius: 50%;
+            border: 1px solid rgba(130, 220, 255, 0.22);
+            background: radial-gradient(circle at center, rgba(130, 220, 255, 0.10), transparent 60%);
+            box-shadow: 0 0 18px rgba(130, 220, 255, 0.08), inset 0 0 20px rgba(130, 220, 255, 0.05);
+        }
+
+        .aegis-eye::before,
+        .aegis-eye::after {
+            content: "";
+            position: absolute;
+            inset: 16px;
+            border-radius: 50%;
+            border: 1px solid rgba(130, 220, 255, 0.12);
+            animation: spin 14s linear infinite;
+        }
+
+        .aegis-eye::after {
+            inset: 34px;
+            animation: spin-reverse 10s linear infinite;
+        }
+
+        .aegis-core {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 34px;
+            height: 34px;
+            margin-left: -17px;
+            margin-top: -17px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, #eefbff 0%, #9fd3ff 38%, rgba(159, 211, 255, 0.7) 55%, rgba(159, 211, 255, 0.16) 74%, transparent 100%);
+            box-shadow: 0 0 16px rgba(159, 211, 255, 0.65), 0 0 30px rgba(159, 211, 255, 0.22);
+            transition: transform 120ms linear;
+        }
+
+        .aegis-message {
+            margin-top: 8px;
+            min-height: 42px;
+            color: #dceff8;
+            font-size: 12px;
+            line-height: 1.6;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .journal-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .journal-entry {
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(232, 216, 162, 0.10);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .journal-entry strong {
+            display: block;
+            color: #f2e7c2;
+            font-size: 12px;
+            margin-bottom: 4px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .journal-entry span {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .empty-journal {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .complete-banner {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(130, 220, 255, 0.24);
+            background: rgba(130, 220, 255, 0.08);
+            color: #e7f7ff;
+            font-size: 12px;
+            line-height: 1.6;
+            letter-spacing: 0.06em;
+        }
+
+        .complete-banner.show {
+            display: block;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin-reverse {
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .scene-panel {
+                min-height: 600px;
+            }
+
+            .relic-action-row {
+                top: calc(44% + 180px);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .shell {
+                padding: 14px;
+            }
+
+            .header,
+            .left-inner {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+            .mirror-frame {
+                width: min(88%, 420px);
+            }
+
+            .relic-action-row {
+                top: calc(44% + 150px);
+            }
+
+            .trial-copy {
+                width: 88%;
+                font-size: 11px;
+            }
+
+            .aegis-eye {
+                width: 118px;
+                height: 118px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="shell">
+
+        <div class="top-return">
+            <a href="/oblivian/">← Return to Hall Interface</a>
+        </div>
+
+        <section class="layout">
+            <div class="panel">
+                <header class="header">
+                    <div class="eyebrow">Greater Hall // Reflection & Truth-Fabrication</div>
+                    <h1>Hall of Miragenesis</h1>
+                    <p class="subcopy">
+                        This chamber does not decide what is true. It arranges what may be believed. Reflection,
+                        framing, and witness all become unstable in its presence.
+                    </p>
+                </header>
+
+                <div class="left-inner">
+                    <div class="scene-panel">
+                        <div class="mirror-frame">
+                            <div class="mirror-sheen"></div>
+                            <img class="sigil-mark" src="/assets/images/sigils/Miragenesis.png" alt="Miragenesis sigil"
+                                onerror="this.style.opacity='0.18'">
+                        </div>
+
+                        <div class="relic-action-row">
+                            <button class="btn" id="addToJournalBtn" type="button">Record Relic</button>
+                        </div>
+
+                        <div class="trial-copy">
+                            The mirror does not lie. It only returns the version of you most willing to be accepted.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="side">
+                <section class="block">
+                    <h2>Trial One // Accepted Statement</h2>
+                    <p class="prompt">
+                        Choose the statement most consistent with Miragenesis doctrine.
+                    </p>
+
+                    <div class="choices" id="choices">
+                        <button class="choice-btn" data-correct="false">
+                            Truth is fixed. Reflection can only confirm what already exists.
+                        </button>
+                        <button class="choice-btn" data-correct="true">
+                            Reflection does not reveal truth. It frames a version of truth that can be accepted.
+                        </button>
+                        <button class="choice-btn" data-correct="false">
+                            Belief is irrelevant. Only material evidence can alter testimony.
+                        </button>
+                    </div>
+
+                    <div class="status-line" id="choiceStatus">
+                        Awaiting selection.
+                    </div>
+                </section>
+
+                <section class="block">
+                    <h2>Trial Two // Observational Recall</h2>
+
+                    <p class="prompt">
+                        The chamber has already revealed what governs it.
+                        Not all observers notice.
+                        Fewer remember.
+                    </p>
+
+                    <p class="prompt" style="opacity:0.7;">
+                        Earlier, you were permitted to witness the artefact associated with this Hall.
+                        Record its designation.
+                    </p>
+
+                    <div class="input-wrap">
+                        <input class="relic-input" id="relicInput" type="text" placeholder="Enter relic designation">
+                        <div class="btn-row">
+                            <button class="btn primary" id="submitRelic">Submit</button>
+                            <button class="btn" id="clearRelic" type="button">Clear</button>
+                        </div>
+                    </div>
+
+                    <div class="status-line" id="relicStatus">
+                        Observation incomplete.
+                    </div>
+
+                    <div class="complete-banner" id="completeBanner">
+                        Miragenesis has recognised your imprint. Sequence retained. Hall marked complete.
+                    </div>
+                </section>
+
+                <section class="block">
+                    <h2>Personal Journal</h2>
+                    <div class="journal-list" id="journalEntries">
+                        <div class="empty-journal">No entries recorded.</div>
+                    </div>
+                </section>
+
+                <section class="block">
+                    <h2>Aegis Presence</h2>
+                    <div class="aegis-eye-wrap">
+                        <div class="aegis-eye">
+                            <div class="aegis-core" id="aegisCore"></div>
+                        </div>
+                    </div>
+                    <div class="aegis-message" id="aegisMessage">
+                        Reflection layer active. Testimony remains unstable.
+                    </div>
+                </section>
+            </aside>
+        </section>
+    </main>
+
+    <script>
+        const choiceButtons = [...document.querySelectorAll('.choice-btn')];
+        const choiceStatus = document.getElementById('choiceStatus');
+        const relicInput = document.getElementById('relicInput');
+        const submitRelic = document.getElementById('submitRelic');
+        const clearRelic = document.getElementById('clearRelic');
+        const relicStatus = document.getElementById('relicStatus');
+        const completeBanner = document.getElementById('completeBanner');
+        const aegisCore = document.getElementById('aegisCore');
+        const aegisMessage = document.getElementById('aegisMessage');
+        const journalEntries = document.getElementById('journalEntries');
+        const addToJournalBtn = document.getElementById('addToJournalBtn');
+
+        const STORAGE_KEY = 'hall_miragenesis';
+        const JOURNAL_KEY = 'mnemosyne_journal';
+
+        let truthPassed = false;
+        let relicPassed = false;
+
+        function setAegis(text) {
+            aegisMessage.textContent = text;
+        }
+
+        function normalise(input) {
+            return input.trim().toLowerCase().replace(/\s+/g, ' ');
+        }
+
+        function getJournal() {
+            return JSON.parse(localStorage.getItem(JOURNAL_KEY) || '[]');
+        }
+
+        function saveJournal(entries) {
+            localStorage.setItem(JOURNAL_KEY, JSON.stringify(entries));
+        }
+
+        function renderJournal() {
+            const journal = getJournal();
+
+            if (!journal.length) {
+                journalEntries.innerHTML = '<div class="empty-journal">No entries recorded.</div>';
+                return;
+            }
+
+            journalEntries.innerHTML = journal.map(entry => `
+                <div class="journal-entry">
+                    <strong>${entry.name}</strong>
+                    <span>${entry.note}</span>
+                </div>
+            `).join('');
+        }
+
+        function addJournalEntry(entry) {
+            const journal = getJournal();
+            const exists = journal.some(item => item.name === entry.name && item.hall === entry.hall);
+
+            if (!exists) {
+                journal.push(entry);
+                saveJournal(journal);
+                renderJournal();
+                return true;
+            }
+
+            return false;
+        }
+
+        function checkCompletion() {
+            if (truthPassed && relicPassed) {
+                localStorage.setItem(STORAGE_KEY, 'complete');
+                completeBanner.classList.add('show');
+                setAegis('Miragenesis retains your sequence. Reflection accepted.');
+            }
+        }
+
+        choiceButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const correct = button.dataset.correct === 'true';
+
+                choiceButtons.forEach(btn => {
+                    btn.classList.remove('correct', 'incorrect');
+                });
+
+                if (correct) {
+                    button.classList.add('correct');
+                    truthPassed = true;
+                    choiceStatus.textContent = 'Accepted. Reflection may frame truth without revealing it whole.';
+                    setAegis('Statement retained. Framing acknowledged.');
+                } else {
+                    button.classList.add('incorrect');
+                    truthPassed = false;
+                    choiceStatus.textContent = 'Rejected. Miragenesis does not preserve certainty. It preserves acceptance.';
+                    setAegis('Selection inconsistent. Review your assumptions.');
+                }
+
+                checkCompletion();
+            });
+        });
+
+        submitRelic.addEventListener('click', () => {
+            const value = normalise(relicInput.value);
+
+            if (value === 'mirror seed' || value === 'the mirror seed' || value === 'seed') {
+                relicPassed = true;
+                relicStatus.textContent = 'Confirmed. The chamber acknowledges your memory.';
+                setAegis('Observation retained. Framing stabilised.');
+            } else {
+                relicPassed = false;
+                relicStatus.textContent = 'Incorrect. The chamber has already shown you the answer.';
+                setAegis('Failure to observe distorts testimony.');
+            }
+
+            checkCompletion();
+        });
+
+        clearRelic.addEventListener('click', () => {
+            relicInput.value = '';
+            relicStatus.textContent = 'Observation incomplete.';
+            setAegis('Input cleared.');
+        });
+
+        addToJournalBtn.addEventListener('click', () => {
+            const added = addJournalEntry({
+                type: 'relic',
+                name: 'Mirror Seed',
+                hall: 'Miragenesis',
+                note: 'Sphere of fluorite suspended in myrtle smoke. Reveals what the viewer believes, not what is real.',
+                timestamp: Date.now()
+            });
+
+            if (added) {
+                setAegis('Entry recorded. You choose what to remember.');
+            } else {
+                setAegis('This memory is already retained.');
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            const x = ((e.clientX / window.innerWidth) - 0.5) * 12;
+            const y = ((e.clientY / window.innerHeight) - 0.5) * 12;
+            aegisCore.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        if (localStorage.getItem(STORAGE_KEY) === 'complete') {
+            truthPassed = true;
+            relicPassed = true;
+            completeBanner.classList.add('show');
+            choiceStatus.textContent = 'Accepted. Reflection sequence already retained.';
+            relicStatus.textContent = 'Relic previously confirmed.';
+            setAegis('Miragenesis retains your imprint.');
+        }
+
+        renderJournal();
+    </script>
+</body>
+
+</html>

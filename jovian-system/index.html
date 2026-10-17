@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOVIAN SYSTEM</title>
+  <link rel="stylesheet" href="/css/protocol.css?v=uppercase-titles">
+
+  <style>
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      background: #000;
+    }
+
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.55)),
+        url("../assets/images/europa.jpg");
+      background-size: cover;
+      background-position: 75% center;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    #jovianSystem {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    #jovianSystem .hud {
+      display: grid;
+      grid-template-columns: minmax(340px, 1.2fr) minmax(260px, 0.85fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    #jovianSystem .system-board {
+      position: relative;
+      padding: 20px;
+      border: 1px solid rgba(130, 255, 245, 0.25);
+      background: rgba(0, 0, 0, 0.45);
+    }
+
+    #jovianSystem .system-copy {
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      opacity: 0.9;
+    }
+
+    #jovianSystem .viewport {
+      position: relative;
+      border: 1px solid rgba(130, 255, 245, 0.18);
+      background: radial-gradient(circle at center, rgba(20, 30, 50, 0.45), rgba(0, 0, 0, 0.65));
+      overflow: hidden;
+      min-height: 620px;
+    }
+
+    #jovianSystem svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    #jovianSystem .orbit {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.16);
+      stroke-dasharray: 5 7;
+      transition: opacity 300ms ease;
+    }
+
+    #jovianSystem .body-node {
+      cursor: pointer;
+      transition: opacity 300ms ease;
+    }
+
+    #jovianSystem .body-node image,
+    #jovianSystem .body-node circle {
+      transition: filter 300ms ease, opacity 300ms ease;
+    }
+
+    #jovianSystem .body-node:hover image,
+    #jovianSystem .body-node:hover circle {
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+
+    #jovianSystem .planet-jupiter {
+      stroke: #ffb37a;
+      stroke-width: 2;
+      color: #ffb37a;
+      fill: none;
+    }
+
+    #jovianSystem .moon-io {
+      stroke: #ffc86d;
+      stroke-width: 2;
+      color: #ffc86d;
+      fill: none;
+    }
+
+    #jovianSystem .moon-europa {
+      stroke: #72ff8f;
+      stroke-width: 2;
+      color: #72ff8f;
+      fill: none;
+    }
+
+    #jovianSystem .moon-ganymede {
+      stroke: #8fe8ff;
+      stroke-width: 2;
+      color: #8fe8ff;
+      fill: none;
+    }
+
+    #jovianSystem .moon-callisto {
+      stroke: #c38cff;
+      stroke-width: 2;
+      color: #c38cff;
+      fill: none;
+    }
+
+    #jovianSystem .label {
+      fill: #ffffff;
+      font-size: 12px;
+      text-anchor: middle;
+      font-family: Arial, sans-serif;
+      letter-spacing: 1px;
+      pointer-events: none;
+      transition: opacity 300ms ease;
+    }
+
+    #jovianSystem .jupiter-label {
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+
+    #jovianSystem .dimmed {
+      opacity: 0.08;
+    }
+
+    #jovianSystem .dimmed .label {
+      opacity: 0;
+    }
+
+    #jovianSystem .selected image,
+    #jovianSystem .selected circle {
+      filter: drop-shadow(0 0 16px currentColor);
+    }
+
+    #jovianSystem .hidden-detail {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 350ms ease;
+    }
+
+    #jovianSystem .visible-detail {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #jovianSystem .kepler-orbit {
+      fill: none;
+      stroke: #0affd1;
+      stroke-dasharray: 3 4;
+      opacity: 0.8;
+    }
+
+    #jovianSystem .kepler-station {
+      fill: #0affd1;
+      filter: drop-shadow(0 0 8px #0affd1);
+    }
+
+    #jovianSystem .readout {
+      border: 1px solid rgba(130, 255, 245, 0.25);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 16px;
+      min-height: 220px;
+    }
+
+    #jovianSystem .readout-kicker {
+      font-size: 11px;
+      letter-spacing: 2px;
+      opacity: 0.72;
+      margin-bottom: 10px;
+    }
+
+    #jovianSystem .readout-title {
+      font-size: 20px;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    #jovianSystem .readout-subtitle {
+      font-size: 11px;
+      letter-spacing: 2px;
+      opacity: 0.7;
+      margin-bottom: 14px;
+      min-height: 16px;
+    }
+
+    #jovianSystem .readout-copy {
+      font-size: 13px;
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    #jovianSystem .readout-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #jovianSystem .readout-list li {
+      font-size: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(130, 255, 245, 0.12);
+    }
+
+    #jovianSystem .readout-note {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(130, 255, 245, 0.16);
+      font-size: 12px;
+      opacity: 0.85;
+      line-height: 1.5;
+      min-height: 40px;
+    }
+
+    #jovianSystem .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    #jovianSystem .control-btn {
+      border: 1px solid rgba(130, 255, 245, 0.25);
+      background: rgba(0, 0, 0, 0.45);
+      color: #0affd1;
+      padding: 8px 12px;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+    }
+
+    #jovianSystem .control-btn:hover {
+      box-shadow: 0 0 10px rgba(10, 255, 209, 0.2);
+    }
+
+    #jovianSystem .glitching {
+      animation: moonNameGlitch 700ms steps(2, end) 1;
+    }
+
+    @keyframes moonNameGlitch {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0);
+      }
+
+      20% {
+        opacity: 0.8;
+        transform: translate(-1px, 0);
+      }
+
+      40% {
+        opacity: 1;
+        transform: translate(1px, 0);
+      }
+
+      60% {
+        opacity: 0.75;
+        transform: translate(0, -1px);
+      }
+
+      80% {
+        opacity: 1;
+        transform: translate(0, 1px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translate(0, 0);
+      }
+    }
+
+    @media (max-width: 900px) {
+      #jovianSystem .hud {
+        grid-template-columns: 1fr;
+      }
+
+      #jovianSystem .viewport {
+        min-height: 520px;
+      }
+
+      #jovianSystem svg {
+        width: 165%;
+        max-width: none;
+        margin-left: -22%;
+      }
+
+      #jovianSystem .readout-title {
+        font-size: 18px;
+      }
+
+      #jovianSystem .label {
+        font-size: 13px;
+      }
+
+      #jovianSystem .jupiter-label {
+        font-size: 15px;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="/css/archive-sections.css">
+<link rel="stylesheet" href="/css/jovian-orbits.css">
+<link rel="stylesheet" href="/css/jovian-reboot.css?v=level3-complete"><link rel="stylesheet" href="/css/memory-archive.css?v=datapad-consistent-2">
+<script>if(window.self!==window.top)document.documentElement.classList.add('archive-embedded');</script>
+</head>
+
+<body class="memory-archive"><header class="archive-systembar"><a href="/station/">DAEDALUS // MEMORY ARCHIVE</a><span>RECORD TERMINAL / JOVIAN SYSTEM</span></header>
+
+  <div class="wrapper">
+
+    
+
+    <div class="content site-shell">
+      <p class="eyebrow">Daedalus // Orbital records</p><h1 class="title">Jovian System</h1>
+
+      <div id="jovianSystem">
+        <div class="hud">
+
+          <div class="system-board">
+            <div class="system-copy">Select a moon to interrogate its record. Orbital simulation: one Earth day = 12 seconds. Distances proportional; bodies enlarged. Illustrative phases, not current sky positions.</div>
+
+            <div class="viewport">
+<svg id="orbital-map" viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" aria-label="Animated Galilean moons orbiting Jupiter"><g id="orbit-tracks"></g><g id="orbit-bodies"></g></svg><nav id="moon-selector" aria-label="Select orbital record"></nav><p class="system-copy">Orbital elements: <a href="https://nssdc.gsfc.nasa.gov/planetary/factsheet/joviansatfact.html" target="_blank" rel="noopener">NASA Jovian Satellite Fact Sheet</a>. Simplified projected orbits; mutual perturbations omitted. Interference can be suppressed.</p>
+            </div>
+          </div>
+
+          <div class="readout">
+            <button id="back-to-orbits" type="button" hidden>← Orbital animation</button>
+            <div class="readout-kicker">ORBITAL READOUT</div>
+            <div class="readout-title" id="readoutTitle">JOVIAN SYSTEM</div>
+            <div class="readout-subtitle" id="readoutSubtitle">JUPITER</div>
+            <div class="readout-copy" id="readoutCopy">Select a moon to interrogate its record. Orbital simulation: one Earth day = 12 seconds. Distances proportional; bodies enlarged. Illustrative phases, not current sky positions.</div>
+            <ul class="readout-list" id="readoutList"></ul>
+            <nav id="celestial-catalogue" aria-label="Celestial body catalogue"></nav>
+            <div class="readout-note" id="readoutNote"></div><section id="buried-record" hidden aria-label="Recovered archive fragment"><p class="eyebrow">PALIMPSEST // UNSANCTIONED RECORD</p><div id="buried-copy"></div></section>
+
+            <div class="controls">
+              <button class="control-btn" id="pauseOrbits" type="button">Pause orbits</button><button class="control-btn" id="archiveNoise" type="button" aria-pressed="false">Suppress interference</button><button class="control-btn" id="resetViewBtn" type="button">RESET VIEW</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <footer class="site-footer"><a href="/aegis/submit.html">Submit</a><a data-archive aria-disabled="true" style="opacity:.45">Archive Access</a><a href="/aegis/channel.html">Direct Channel</a></footer>
+
+  </div>
+
+  <script type="module" src="/assets/js/jovian-orbits.js?v=fast-reboot"></script>
+
+<script type="module">import {readState,syncNav} from "/assets/js/protocol.js?v=progression-12";readState().then(s=>{syncNav(s);document.querySelectorAll("[data-archive]").forEach(a=>a.style.opacity="1")}).catch(()=>{});</script></body>
+
+</html>

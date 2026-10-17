@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ophelia Fox</title>
+    <link rel="stylesheet" href="/css/protocol.css?v=uppercase-titles">
+<link rel="stylesheet" href="/css/archive-sections.css">
+<link rel="stylesheet" href="/css/memory-archive.css?v=datapad-consistent-2">
+<script>if(window.self!==window.top)document.documentElement.classList.add('archive-embedded');</script>
+</head>
+
+<body class="memory-archive"><header class="archive-systembar"><a href="/station/">DAEDALUS // MEMORY ARCHIVE</a><span>RECORD TERMINAL / CREW</span></header>
+
+    <div class="wrapper">
+
+        <div class="content site-shell">
+
+            
+
+            <p class="eyebrow">Daedalus // Personnel archive</p><h1 class="title">OPHELIA FOX</h1>
+
+            <div class="profile">
+
+                <!-- LEFT -->
+                <div class="profile-image">
+                    <div class="image-card image-stack">
+
+                        <img id="opheliaBase" src="../assets/images/crew/ophelia.jpg">
+
+                        <img id="caretakerOverlay" src="../assets/images/players/caretaker.jpg">
+
+                        <div>SYSTEMS ANALYST</div>
+                    </div>
+                </div>
+
+                <!-- RIGHT -->
+                <div class="profile-content">
+
+                    <div class="panel">
+                        <div class="label">OBSERVATIONAL SUMMARY</div>
+                        <div class="content-text">
+                            Displays elevated pattern recognition and anomaly detection beyond baseline human
+                            thresholds.
+                            Repeatedly identifies inconsistencies in environmental and behavioural continuity prior to
+                            system recognition.
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="label">BEHAVIOURAL PROFILE</div>
+                        <div class="content-text">
+                            Guarded. Introspective. Exhibits compulsive pattern tracking when exposed to recursive
+                            drift.
+                            Emotional responses are tightly controlled but spike in proximity to specific crew members.
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="label">MOTIVATION</div>
+                        <div class="content-text">
+                            Driven by a need to reconcile conflicting memory states and establish a stable truth.
+                            Increasing emotional dependency linked to preservation of interpersonal connection.
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="label">BACKGROUND RECORD</div>
+                        <div class="content-text">
+                            Systems analyst specialising in pattern recognition and anomaly detection.
+                            Previously issued a formal reprimand for unauthorised experimentation involving restricted
+                            AI interaction protocols.
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="label">CROSS-REFERENCE</div>
+                        <div class="content-text">
+                            Martha Saul — emotional variance increases significantly in proximity.
+                            Ezra Vale — shared exposure to recursive data anomalies.
+                            Tarek — unidentified resonance interaction.
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="label">SYSTEM NOTE</div>
+                        <div class="content-text">
+                            Subject may retain partial memory continuity across loop resets.
+                            Behaviour suggests awareness of non-linear temporal repetition.
+                            Classified as a potential “anchor node” within the system.
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="label">VERIFIED TESTIMONY</div>
+                        <div class="content-text">
+                            “We’ve been here before… I just don’t know how many times.”
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <footer class="site-footer"><a href="/aegis/submit.html">Submit</a><a data-archive aria-disabled="true" style="opacity:.45">Archive Access</a><a href="/aegis/channel.html">Direct Channel</a></footer>
+
+    </div>
+    <script>
+        let triggered = false;
+        let flickerCount = 0;
+
+        function triggerFlicker() {
+            if (flickerCount >= 3) return;
+
+            const overlay = document.getElementById("caretakerOverlay");
+            if (!overlay) return;
+
+            flickerCount++;
+
+            // random tiny offset
+            const x = (Math.random() - 0.5) * 6; // -3px to +3px
+            const y = (Math.random() - 0.5) * 6;
+
+            overlay.style.transform = `translate(${x}px, ${y}px) scale(1.02)`;
+            overlay.style.opacity = "0.75";
+
+            setTimeout(() => {
+                overlay.style.opacity = "0";
+                overlay.style.transform = "translate(0,0) scale(1)";
+            }, 180);
+        }
+
+        // detect scroll depth
+        window.addEventListener("scroll", () => {
+            if (triggered) return;
+
+            const scrollPos = window.scrollY + window.innerHeight;
+            const threshold = document.body.scrollHeight * 0.6; // lowered for reliability
+
+            if (scrollPos >= threshold) {
+                triggered = true;
+
+                setTimeout(triggerFlicker, 2000);
+                setTimeout(triggerFlicker, 15000);
+                setTimeout(triggerFlicker, 30000);
+            }
+        });
+    </script>
+<script type="module">import {readState,syncNav} from "/assets/js/protocol.js?v=progression-12";readState().then(s=>{syncNav(s);document.querySelectorAll("[data-archive]").forEach(a=>a.style.opacity="1")}).catch(()=>{});</script></body>
+
+</html>

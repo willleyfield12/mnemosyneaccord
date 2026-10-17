@@ -1,0 +1,136 @@
+#aegis-eye-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+}
+
+#aegis-eye {
+    position: relative;
+    width: 104px;
+    height: 58px;
+    border-radius: 100px / 58px;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    overflow: hidden;
+    box-shadow:
+        0 0 12px rgba(255, 255, 255, 0.16),
+        0 0 26px rgba(255, 255, 255, 0.10),
+        inset 0 0 22px rgba(255, 255, 255, 0.06);
+    background:
+        radial-gradient(ellipse at center, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0) 74%),
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    transition: transform 120ms linear, opacity 240ms ease, filter 240ms ease;
+    opacity: 0.92;
+}
+
+#aegis-eye::before,
+#aegis-eye::after {
+    content: "";
+    position: absolute;
+    left: -3%;
+    width: 106%;
+    pointer-events: none;
+    transition: transform 240ms ease;
+}
+
+#aegis-eye::before {
+    top: -8%;
+    height: 46%;
+    background: linear-gradient(180deg, rgba(2,6,12,0.92), rgba(8,12,18,0.24));
+    border-bottom: 1px solid rgba(255,255,255,0.14);
+    border-radius: 0 0 60% 60% / 0 0 100% 100%;
+}
+
+#aegis-eye::after {
+    bottom: -8%;
+    height: 42%;
+    background: linear-gradient(180deg, rgba(8,12,18,0.18), rgba(2,6,12,0.92));
+    border-top: 1px solid rgba(255,255,255,0.10);
+    border-radius: 60% 60% 0 0 / 100% 100% 0 0;
+}
+
+#aegis-eye .iris-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 38px;
+    height: 38px;
+    margin-left: -19px;
+    margin-top: -19px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.18);
+    background:
+        radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 60%, rgba(255,255,255,0) 74%);
+    box-shadow: 0 0 12px rgba(255,255,255,0.06);
+}
+
+#aegis-pupil {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 22px;
+    height: 22px;
+    margin-left: -11px;
+    margin-top: -11px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 40% 40%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.92) 28%, rgba(255,255,255,0.34) 62%, rgba(255,255,255,0.12) 74%, rgba(255,255,255,0) 82%);
+    box-shadow:
+        0 0 10px rgba(255,255,255,0.95),
+        0 0 24px rgba(255,255,255,0.42);
+    transition: transform 100ms linear, background 180ms ease, box-shadow 180ms ease;
+}
+
+#aegis-eye.blink::before {
+    transform: translateY(12px);
+}
+
+#aegis-eye.blink::after {
+    transform: translateY(-11px);
+}
+
+#aegis-message {
+    max-width: 220px;
+    padding: 8px 10px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    line-height: 1.45;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(0, 0, 0, 0.48);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.06);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 220ms ease, transform 220ms ease;
+}
+
+#aegis-message.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#aegis-eye.focused {
+    filter: brightness(1.18);
+    box-shadow:
+        0 0 16px rgba(255, 255, 255, 0.24),
+        0 0 34px rgba(255, 255, 255, 0.16),
+        inset 0 0 20px rgba(255,255,255,0.12);
+}
+
+#aegis-eye.warning {
+    filter: brightness(1.32);
+}
+
+#aegis-eye.warning #aegis-pupil {
+    box-shadow:
+        0 0 12px rgba(255,255,255,1),
+        0 0 28px rgba(255,255,255,0.66);
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INCIDENT REPORTS</title>
+    <link rel="stylesheet" href="/css/protocol.css?v=uppercase-titles">
+
+    <style>
+        .log-shell {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .incident-panel {
+            border: 1px solid rgba(10, 255, 209, 0.28);
+            background: rgba(0, 0, 0, 0.52);
+            backdrop-filter: blur(4px);
+            padding: 18px;
+            margin-bottom: 18px;
+        }
+
+        .incident-meta {
+            font-size: 11px;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .incident-title {
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .incident-copy {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .incident-tag {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            padding: 4px 8px;
+            border: 1px solid rgba(10, 255, 209, 0.3);
+            opacity: 0.85;
+        }
+
+        .sev-low {
+            border-color: #72ff8f;
+            color: #72ff8f;
+        }
+
+        .sev-med {
+            border-color: #ffd36f;
+            color: #ffd36f;
+        }
+
+        .sev-high {
+            border-color: #ff8f8f;
+            color: #ff8f8f;
+        }
+
+        .sev-unknown {
+            border-color: #c38cff;
+            color: #c38cff;
+        }
+
+        .corrupt-line {
+            color: #c38cff;
+            opacity: 0.85;
+            letter-spacing: 1px;
+        }
+
+        .return-row {
+            margin-top: 18px;
+        }
+
+        .return-link {
+            display: inline-block;
+            text-decoration: none;
+            color: #0affd1;
+            border: 1px solid rgba(10, 255, 209, 0.25);
+            background: rgba(0, 0, 0, 0.45);
+            padding: 10px 14px;
+            letter-spacing: 1.5px;
+            font-size: 11px;
+        }
+
+        .return-link:hover {
+            box-shadow: 0 0 10px rgba(10, 255, 209, 0.2);
+        }
+    </style>
+<link rel="stylesheet" href="/css/archive-sections.css">
+<link rel="stylesheet" href="/css/memory-archive.css?v=datapad-consistent-2">
+<script>if(window.self!==window.top)document.documentElement.classList.add('archive-embedded');</script>
+</head>
+
+<body class="memory-archive"><header class="archive-systembar"><a href="/station/">DAEDALUS // MEMORY ARCHIVE</a><span>RECORD TERMINAL / MISSION</span></header>
+
+    <div class="wrapper">
+
+        
+
+        <div class="content site-shell">
+            <p class="eyebrow">Daedalus // Mission continuity</p><h1 class="title">Incident Reports</h1>
+
+            <div class="log-shell">
+
+                <div class="incident-panel">
+                    <div class="incident-meta">REPORT 01 // ROUTING ANOMALY // DECK 4</div>
+                    <div class="incident-title">UNAUTHORISED CORRIDOR REDIRECTION</div>
+                    <div class="incident-copy">
+                        Crew movement between central command and adjoining service sections resulted in repeated
+                        navigational mismatch.
+                        Personnel reported arriving at unintended destinations despite following confirmed station
+                        routes.
+                        No structural fault was found in baseline schematics.
+                    </div>
+                    <div class="incident-tag sev-med">SEVERITY: ELEVATED</div>
+                </div>
+
+                <div class="incident-panel">
+                    <div class="incident-meta">REPORT 02 // MEMORY VARIANCE // MULTIPLE CREW</div>
+                    <div class="incident-title">INCONSISTENT EVENT RECALL</div>
+                    <div class="incident-copy">
+                        Crew statements regarding shared events, object placement, and prior conversations showed
+                        measurable disagreement.
+                        In several cases, conflicting recollections appeared equally certain. No definitive medical
+                        cause has yet been established.
+                    </div>
+                    <div class="incident-tag sev-high">SEVERITY: HIGH</div>
+                </div>
+
+                <div class="incident-panel">
+                    <div class="incident-meta">REPORT 03 // SYSTEM BEHAVIOUR // ARCHIVE ACCESS</div>
+                    <div class="incident-title">RECORD DESYNCHRONISATION</div>
+                    <div class="incident-copy">
+                        Archived mission records returned inconsistent versions of the same event sequence.
+                        Timestamp order and procedural logging did not remain stable across repeated checks.
+                        Manual copies have been recommended pending further verification.
+                    </div>
+                    <div class="incident-tag sev-high">SEVERITY: CRITICAL REVIEW</div>
+                </div>
+
+                <div class="incident-panel">
+                    <div class="incident-meta">REPORT 04 // OBSERVATIONAL NOTE // CRYO LEVEL</div>
+                    <div class="incident-title">NON-LISTED ACCESS IMPRESSION</div>
+                    <div class="incident-copy">
+                        Personnel reported the brief perception of an access route or threshold not represented on
+                        authorised station plans.
+                        Physical confirmation was not retained after the event window closed.
+                        Associated reports remain incomplete.
+                    </div>
+                    <div class="incident-tag sev-unknown">SEVERITY: UNRESOLVED</div>
+                </div>
+
+                <div class="incident-panel">
+                    <div class="incident-meta">REPORT 05 // DAMAGED ENTRY // SOURCE UNCERTAIN</div>
+                    <div class="incident-title">PARTIAL RECORD FRAGMENT</div>
+                    <div class="incident-copy">
+                        <span class="corrupt-line">Entry recovered with checksum variance. Partial content
+                            preserved.</span><br><br>
+                        Subject reported station continuity breach.<br>
+                        Subject reported recognition of location not listed in active brief.<br>
+                        Subject reported that the structure <span class="corrupt-line">was already waiting</span>.<br>
+                        Remaining content unavailable.
+                    </div>
+                    <div class="incident-tag sev-unknown">SEVERITY: CORRUPTED</div>
+                </div>
+
+                <div class="return-row">
+                    <a class="return-link" href="../mission/index.html">RETURN TO MISSION LOG</a>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="site-footer"><a href="/aegis/submit.html">Submit</a><a data-archive aria-disabled="true" style="opacity:.45">Archive Access</a><a href="/aegis/channel.html">Direct Channel</a></footer>
+
+    </div>
+
+<script type="module">import {readState,syncNav} from "/assets/js/protocol.js?v=progression-12";readState().then(s=>{syncNav(s);document.querySelectorAll("[data-archive]").forEach(a=>a.style.opacity="1")}).catch(()=>{});</script></body>
+
+</html>

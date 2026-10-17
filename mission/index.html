@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission Log</title>
+  <link rel="stylesheet" href="/css/protocol.css?v=uppercase-titles">
+<link rel="stylesheet" href="/css/archive-sections.css">
+<link rel="stylesheet" href="/css/memory-archive.css?v=datapad-consistent-2">
+<script>if(window.self!==window.top)document.documentElement.classList.add('archive-embedded');</script>
+</head>
+
+<body class="memory-archive"><header class="archive-systembar"><a href="/station/">DAEDALUS // MEMORY ARCHIVE</a><span>RECORD TERMINAL / MISSION</span></header>
+
+  <div class="wrapper">
+
+    
+
+    <div class="content site-shell">
+
+      <p class="eyebrow">Daedalus // Mission continuity</p><h1 class="title">Mission Log</h1>
+
+      <section aria-labelledby="aegis-log-title" class="aegis-mission-log"><p class="eyebrow">AEGIS // Retained instructions</p><h2 id="aegis-log-title">Observer mission record</h2><div id="aegis-mission-entries" aria-live="polite"><p>Establishing archive connection…</p></div></section>
+
+      <div class="station-grid">
+
+        <a href="../mission/overview.html" class="station-tile">
+          <div class="tile-inner vertical">
+            <div class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="5" y="4" width="14" height="16" stroke="#0affd1" stroke-width="1.5" />
+                <line x1="8" y1="8" x2="16" y2="8" stroke="#0affd1" stroke-width="1.5" />
+                <line x1="8" y1="12" x2="16" y2="12" stroke="#0affd1" stroke-width="1.5" />
+                <line x1="8" y1="16" x2="13" y2="16" stroke="#0affd1" stroke-width="1.5" />
+              </svg>
+            </div>
+            <div class="tile-label">MISSION OVERVIEW</div>
+          </div>
+        </a>
+
+        <a href="../mission/directives.html" class="station-tile">
+          <div class="tile-inner vertical">
+            <div class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z" stroke="#0affd1" stroke-width="1.5" />
+                <path d="M9.5 12l1.8 1.8 3.2-3.6" stroke="#0affd1" stroke-width="1.5" />
+              </svg>
+            </div>
+            <div class="tile-label">ACTIVE DIRECTIVES</div>
+          </div>
+        </a>
+
+        <a href="../mission/incidents.html" class="station-tile">
+          <div class="tile-inner vertical">
+            <div class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 4L20 18H4L12 4Z" stroke="#0affd1" stroke-width="1.5" />
+                <line x1="12" y1="9" x2="12" y2="13" stroke="#0affd1" stroke-width="1.5" />
+                <circle cx="12" cy="16" r="0.8" fill="#0affd1" />
+              </svg>
+            </div>
+            <div class="tile-label">INCIDENT REPORTS</div>
+          </div>
+        </a>
+
+        <a href="../mission/timeline.html" class="station-tile">
+          <div class="tile-inner vertical">
+            <div class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="8" stroke="#0affd1" stroke-width="1.5" />
+                <path d="M12 8v5l3 2" stroke="#0affd1" stroke-width="1.5" />
+              </svg>
+            </div>
+            <div class="tile-label">TIMELINE / LOGS</div>
+          </div>
+        </a>
+
+      </div>
+
+    </div>
+
+    <footer class="site-footer"><a href="/aegis/submit.html">Submit</a><a data-archive aria-disabled="true" style="opacity:.45">Archive Access</a><a href="/aegis/channel.html">Direct Channel</a></footer>
+
+  </div>
+
+<script type="module">import {readState,syncNav} from "/assets/js/protocol.js?v=progression-12";readState().then(s=>{syncNav(s);document.querySelectorAll("[data-archive]").forEach(a=>a.style.opacity="1")}).catch(()=>{});</script><script type="module" src="/assets/js/mission-log.js?v=hall-classes"></script></body>
+
+</html>

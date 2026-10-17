@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACTIVE DIRECTIVES</title>
+    <link rel="stylesheet" href="/css/protocol.css?v=uppercase-titles">
+
+    <style>
+        .log-shell {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .directive-panel {
+            border: 1px solid rgba(10, 255, 209, 0.28);
+            background: rgba(0, 0, 0, 0.52);
+            backdrop-filter: blur(4px);
+            padding: 18px;
+            margin-bottom: 18px;
+        }
+
+        .directive-kicker {
+            font-size: 11px;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .directive-title {
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .directive-text {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .directive-tag {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            padding: 4px 8px;
+            border: 1px solid rgba(10, 255, 209, 0.3);
+            opacity: 0.8;
+        }
+
+        .priority-high {
+            border-color: #ff8f8f;
+            color: #ff8f8f;
+        }
+
+        .priority-med {
+            border-color: #ffd36f;
+            color: #ffd36f;
+        }
+
+        .priority-low {
+            border-color: #72ff8f;
+            color: #72ff8f;
+        }
+
+        .return-row {
+            margin-top: 18px;
+        }
+
+        .return-link {
+            display: inline-block;
+            text-decoration: none;
+            color: #0affd1;
+            border: 1px solid rgba(10, 255, 209, 0.25);
+            background: rgba(0, 0, 0, 0.45);
+            padding: 10px 14px;
+            letter-spacing: 1.5px;
+            font-size: 11px;
+        }
+
+        .return-link:hover {
+            box-shadow: 0 0 10px rgba(10, 255, 209, 0.2);
+        }
+    </style>
+<link rel="stylesheet" href="/css/archive-sections.css">
+<link rel="stylesheet" href="/css/memory-archive.css?v=datapad-consistent-2">
+<script>if(window.self!==window.top)document.documentElement.classList.add('archive-embedded');</script>
+</head>
+
+<body class="memory-archive"><header class="archive-systembar"><a href="/station/">DAEDALUS // MEMORY ARCHIVE</a><span>RECORD TERMINAL / MISSION</span></header>
+
+    <div class="wrapper">
+
+        
+
+        <div class="content site-shell">
+            <p class="eyebrow">Daedalus // Mission continuity</p><h1 class="title">Active Directives</h1>
+
+            <div class="log-shell">
+
+                <div class="directive-panel">
+                    <div class="directive-kicker">DIRECTIVE 01</div>
+                    <div class="directive-title">MAINTAIN ORBITAL POSITION</div>
+                    <div class="directive-text">
+                        Kepler-III must maintain stable orbital position above Europa.
+                        Station drift, orbital decay, or unauthorised repositioning is prohibited unless commanded
+                        through authorised command channels.
+                    </div>
+                    <div class="directive-tag priority-low">PRIORITY: STANDARD</div>
+                </div>
+
+                <div class="directive-panel">
+                    <div class="directive-kicker">DIRECTIVE 02</div>
+                    <div class="directive-title">PRESERVE STATION CONTINUITY</div>
+                    <div class="directive-text">
+                        All crew are responsible for maintaining operational continuity of Kepler-III systems, archives,
+                        and cryogenic assets.
+                        Loss of continuity is considered a mission-level failure condition.
+                    </div>
+                    <div class="directive-tag priority-med">PRIORITY: ELEVATED</div>
+                </div>
+
+                <div class="directive-panel">
+                    <div class="directive-kicker">DIRECTIVE 03</div>
+                    <div class="directive-title">REPORT SYSTEM ANOMALIES</div>
+                    <div class="directive-text">
+                        Any irregularities in station behaviour, navigation routes, time perception, memory continuity,
+                        or environmental readings
+                        must be logged and reported through the Mission Log and Diagnostics Hub immediately.
+                    </div>
+                    <div class="directive-tag priority-med">PRIORITY: ELEVATED</div>
+                </div>
+
+                <div class="directive-panel">
+                    <div class="directive-kicker">DIRECTIVE 04</div>
+                    <div class="directive-title">RESTRICTED ACCESS PROTOCOL</div>
+                    <div class="directive-text">
+                        Access to sealed sections, archival vaults, and non-listed sub-decks is restricted.
+                        Any crew member encountering an unlisted corridor, structure, or deck designation must report
+                        immediately and not proceed alone.
+                    </div>
+                    <div class="directive-tag priority-high">PRIORITY: RESTRICTED</div>
+                </div>
+
+                <div class="directive-panel">
+                    <div class="directive-kicker">DIRECTIVE 05</div>
+                    <div class="directive-title">CONTINUITY OF RECORD</div>
+                    <div class="directive-text">
+                        Mission logs must be maintained even in the event of conflicting records, missing time, or
+                        inconsistent system reports.
+                        If records do not match lived events, both must be preserved.
+                    </div>
+                    <div class="directive-tag priority-high">PRIORITY: ARCHIVAL</div>
+                </div>
+
+                <div class="return-row">
+                    <a class="return-link" href="../mission/index.html">RETURN TO MISSION LOG</a>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="site-footer"><a href="/aegis/submit.html">Submit</a><a data-archive aria-disabled="true" style="opacity:.45">Archive Access</a><a href="/aegis/channel.html">Direct Channel</a></footer>
+
+    </div>
+
+<script type="module">import {readState,syncNav} from "/assets/js/protocol.js?v=progression-12";readState().then(s=>{syncNav(s);document.querySelectorAll("[data-archive]").forEach(a=>a.style.opacity="1")}).catch(()=>{});</script></body>
+
+</html>

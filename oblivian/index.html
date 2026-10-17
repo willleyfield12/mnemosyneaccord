@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Twelve Halls</title>
+    <style>
+        :root {
+            --bg: #04070d;
+            --panel: rgba(7, 12, 21, 0.95);
+            --line: rgba(92, 151, 222, 0.28);
+            --gold: #f2dfb8;
+            --text: #eef4ff;
+            --muted: #b8c6d9;
+            --accent: #8fd5ff;
+            --radius: 22px;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+            --max: 1560px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background:
+                radial-gradient(circle at top center, rgba(29, 54, 90, 0.2), transparent 24%),
+                linear-gradient(180deg, #03060b 0%, #050811 100%);
+            color: var(--text);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 14px;
+        }
+
+        .page {
+            width: min(100%, var(--max));
+            margin: 0 auto;
+        }
+
+        .panel {
+            position: relative;
+            background: linear-gradient(180deg, rgba(6, 11, 20, 0.95), rgba(5, 9, 16, 0.98));
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 22%);
+        }
+
+        .top-bar {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .top-card {
+            padding: 12px 16px 16px;
+            min-height: 126px;
+        }
+
+        .utility-title {
+            margin: 0 0 12px;
+            font-size: 0.78rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .exit-button,
+        .enter-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 40px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(242, 223, 184, 0.18);
+            background: linear-gradient(180deg, rgba(242, 223, 184, 0.08), rgba(242, 223, 184, 0.02));
+            color: #f5e6c8;
+            text-decoration: none;
+            font-size: 0.74rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+            cursor: pointer;
+        }
+
+        .exit-button:hover,
+        .enter-button:hover,
+        .exit-button:focus-visible,
+        .enter-button:focus-visible {
+            border-color: rgba(242, 223, 184, 0.4);
+            box-shadow: 0 0 22px rgba(242, 223, 184, 0.1);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .agent-core {
+            position: relative;
+            width: 170px;
+            height: 52px;
+            margin: 2px auto 10px;
+        }
+
+        .agent-core::before,
+        .agent-core::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            border: 1px solid rgba(242, 223, 184, 0.18);
+        }
+
+        .agent-core::before {
+            width: 140px;
+            height: 36px;
+            top: 8px;
+        }
+
+        .agent-core::after {
+            width: 78px;
+            height: 18px;
+            top: 17px;
+        }
+
+        .iris {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(248, 233, 190, 1) 0%, rgba(234, 207, 129, 0.88) 45%, rgba(234, 207, 129, 0.08) 72%, transparent 100%);
+            box-shadow: 0 0 18px rgba(234, 207, 129, 0.28);
+        }
+
+        .agent-line {
+            margin: 0;
+            text-align: center;
+            color: #e2cd9f;
+            font-size: 0.72rem;
+            letter-spacing: 0.17em;
+            text-transform: uppercase;
+        }
+
+        .monitor-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: #ead8b8;
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .monitor-row:last-child {
+            border-bottom: 0;
+        }
+
+        .hero {
+            padding: 18px 26px 20px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            margin: 0 0 10px;
+            color: var(--gold);
+            font-size: 0.74rem;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(2.5rem, 4.5vw, 5rem);
+            line-height: 1.03;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #fff0cf;
+            text-shadow: 0 0 14px rgba(240, 221, 181, 0.12);
+        }
+
+        .subcopy {
+            margin: 14px auto 0;
+            max-width: 90ch;
+            width: 100%;
+            text-align: center;
+            color: #dcc9a6;
+            line-height: 1.7;
+            font-size: 0.98rem;
+        }
+
+        .subcopy .breakline {
+            display: block;
+        }
+
+        .hero-flags {
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .flag {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(240, 221, 181, 0.16);
+            background: rgba(240, 221, 181, 0.04);
+            color: #ead9b7;
+            font-size: 0.7rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.75fr) 340px;
+            gap: 18px;
+            align-items: start;
+            margin-bottom: 18px;
+        }
+
+        .hall-interface {
+            padding: 18px;
+        }
+
+        .sigil-zone {
+            padding: 14px 18px 20px;
+            border-radius: 20px;
+            background:
+                radial-gradient(circle at center, rgba(54, 124, 120, 0.14), transparent 58%),
+                linear-gradient(180deg, rgba(19, 35, 41, 0.78), rgba(8, 15, 21, 0.82));
+            border: 1px solid rgba(96, 164, 157, 0.14);
+        }
+
+        .band-title {
+            margin: 0 0 12px;
+            text-align: center;
+            color: var(--gold);
+            font-size: 0.72rem;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+        }
+
+        .greater-grid,
+        .lesser-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px 16px;
+            justify-items: center;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .sigil-item {
+            text-align: center;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .sigil-button {
+            appearance: none;
+            border: 0;
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            color: inherit;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .seal {
+            width: 108px;
+            height: 108px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            border: 1px solid rgba(228, 203, 144, 0.46);
+            background: radial-gradient(circle at center, rgba(88, 133, 120, 0.28) 0%, rgba(26, 40, 38, 0.92) 72%);
+            box-shadow: 0 0 26px rgba(92, 201, 186, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .sigil-button:hover .seal,
+        .sigil-button:focus-visible .seal,
+        .sigil-button.active .seal {
+            transform: translateY(-2px) scale(1.03);
+            border-color: rgba(243, 223, 181, 0.72);
+            box-shadow: 0 0 34px rgba(110, 222, 205, 0.32);
+        }
+
+        .sigil-button:focus-visible {
+            outline: none;
+        }
+
+        .sigil-img {
+            display: block;
+            width: 72%;
+            height: 72%;
+            object-fit: contain;
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 0 8px rgba(243, 223, 181, 0.18));
+        }
+
+        .label {
+            font-size: 0.63rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #dbc699;
+            line-height: 1.45;
+        }
+
+        .selected-panel {
+            padding: 16px 18px 20px;
+        }
+
+        .selected-panel h3 {
+            margin: 0 0 10px;
+            color: #fff0cf;
+            font-size: 1.05rem;
+            line-height: 1.1;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .selected-meta {
+            margin: 0 0 14px;
+            color: #d2bd93;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .selected-art {
+            width: 210px;
+            height: 210px;
+            margin: 12px auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selected-art .seal {
+            width: 210px;
+            height: 210px;
+            margin: 0;
+        }
+
+        .selected-copy {
+            margin: 0 0 18px;
+            color: #e2d0b0;
+            font-size: 0.95rem;
+            line-height: 1.72;
+        }
+
+        .fragments-panel {
+            padding: 18px 22px 22px;
+        }
+
+        .section-title {
+            margin: 0 0 14px;
+            font-size: 0.95rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .fragments-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .fragment {
+            min-height: 220px;
+            padding: 16px 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(105, 180, 255, 0.2);
+            background: rgba(4, 10, 19, 0.94);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .fragment h3 {
+            margin: 0 0 12px;
+            font-size: 0.74rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #eef4ff;
+        }
+
+        .fragment p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 0.96rem;
+        }
+
+        .fragment footer {
+            margin-top: 18px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(111, 175, 248, 0.16);
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+        }
+
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 980px) {
+
+            .top-bar,
+            .fragments-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .greater-grid,
+            .lesser-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+
+            .hero {
+                padding: 18px 16px 18px;
+            }
+
+            .hero h1 {
+                letter-spacing: 0.08em;
+            }
+
+            .seal {
+                width: 92px;
+                height: 92px;
+            }
+
+            .selected-art {
+                width: 170px;
+                height: 170px;
+            }
+
+            .selected-art .seal {
+                width: 170px;
+                height: 170px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <section class="top-bar">
+            <section class="panel top-card">
+                <h2 class="utility-title">Exit Route</h2>
+                <a class="exit-button" href="#">Return to Main Site</a>
+            </section>
+
+            <section class="panel top-card">
+                <h2 class="utility-title">Aegis Agent</h2>
+                <div class="agent-core">
+                    <div class="iris"></div>
+                </div>
+                <p class="agent-line">Hallucigenesis retains your imprint.</p>
+            </section>
+
+            <section class="panel top-card">
+                <h2 class="utility-title">Judicial Monitor</h2>
+                <div class="monitor-row"><span>Observer Status</span><span>Recognised</span></div>
+                <div class="monitor-row"><span>Halls Completed</span><span>4 / 12</span></div>
+                <div class="monitor-row"><span>Selected Hall</span><span id="monitor-selected">Hallucigenesis</span>
+                </div>
+                <div class="monitor-row"><span>Repository Gate</span><span>Recovered</span></div>
+            </section>
+        </section>
+
+        <section class="panel hero">
+            <p class="eyebrow">Oblivian Layer // Hall Interface</p>
+            <h1>The Twelve Halls</h1>
+            <p class="subcopy">
+                The seals below are not decorative. Each Hall preserves a power, a trial, and a narrative.
+                <span class="breakline">Progress is granted selectively. Some doors respond only to those already
+                    noticed.</span>
+            </p>
+            <div class="hero-flags">
+                <span class="flag">Access Node Stabilised</span>
+                <span class="flag">Judicial Attention Active</span>
+                <span class="flag">Oblivian Layer Loaded</span>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <section class="panel hall-interface">
+                <div class="sigil-zone">
+                    <h2 class="band-title">Greater Halls</h2>
+                    <div class="greater-grid">
+                        <div class="sigil-item">
+                            <button class="sigil-button active" type="button" aria-label="Select Hall of Waking Dreams"
+                                data-name="Hall of Waking Dreams" data-short="Waking Dreams"
+                                data-meta="Greater Hall // Perception &amp; Madness"
+                                data-copy="Perfume of jasmine. Chambers lined with chamomile. Amber remembering what never truly happened. This Hall specialises in disguising terror as calm."
+                                data-href="hall-WakingDreams.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/wakingdreams.png"
+                                        alt="Hall of Waking Dreams sigil" />
+                                </div>
+                                <div class="label">Waking Dreams</div>
+                            </button>
+                        </div>
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Divided Mirror"
+                                data-name="Hall of Divided Mirror" data-short="Divided Mirror"
+                                data-meta="Greater Hall // Reflection &amp; Fabrication"
+                                data-copy="A Hall of crafted perception, false certainties, and seductive revisions. Here, the reflected thing is often trusted more than the real one."
+                                data-href="hall-dividedmirror.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/dividedmirror.png"
+                                        alt="Hall of Divided Mirror sigil" />
+                                </div>
+                                <div class="label">Divided Mirror</div>
+                            </button>
+                        </div>
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Answering World"
+                                data-name="Hall of Answering World" data-short="Answering World"
+                                data-meta="Greater Hall // Reality Adaptation"
+                                data-copy="This Hall concerns the bending of circumstance to necessity. It does not ask what is true. It asks what must become true to survive."
+                                data-href="hall-answeringworld.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/answeringworld.png"
+                                        alt="Hall of Answering World sigil" />
+                                </div>
+                                <div class="label">Answering World</div>
+                            </button>
+                        </div>
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Living Axis"
+                                data-name="Hall of Living Axis" data-short="Living Axis"
+                                data-meta="Greater Hall // Environmental Command"
+                                data-copy="Its adepts master terrain, pressure, atmosphere, and force. The chamber itself behaves like an accomplice to their will."
+                                data-href="hall-livingaxis.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/livingaxis.png"
+                                        alt="Hall of Living Axis sigil" />
+                                </div>
+                                <div class="label">Living Axis</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <h2 class="band-title">Lesser Halls // Tier One</h2>
+                    <div class="lesser-grid">
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Returning Voice"
+                                data-name="Hall of Returning Voice" data-short="Returning Voice"
+                                data-meta="Lesser Hall // Resonance &amp; Return"
+                                data-copy="Every sound is an imprint waiting to be called back. This Hall teaches that repetition can become authority."
+                                data-href="hall-returningvoice.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/returningvoice.png"
+                                        alt="Hall of Returning Voice sigil" />
+                                </div>
+                                <div class="label">Returning Voice</div>
+                            </button>
+                        </div>
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Open Mind"
+                                data-name="Hall of Open Mind" data-short="Open Mind"
+                                data-meta="Lesser Hall // Thought Manipulation"
+                                data-copy="Here, cognition is neither private nor stable. What begins as suggestion often ends as ownership."
+                                data-href="hall-openmind.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/openmind.png"
+                                        alt="Hall of Open Mind sigil" />
+                                </div>
+                                <div class="label">Open Mind</div>
+                            </button>
+                        </div>
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Shared Heart"
+                                data-name="Hall of Shared Heart" data-short="Shared Heart"
+                                data-meta="Lesser Hall // Emotion Architecture"
+                                data-copy="Its doctrine is simple and monstrous: alter the feeling, and the decision will follow obediently behind it."
+                                data-href="hall-sharedheart.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/sharedheart.png"
+                                        alt="Hall of Shared Heart sigil" />
+                                </div>
+                                <div class="label">Shared Heart</div>
+                            </button>
+                        </div>
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Living Scripture"
+                                data-name="Hall of Living Scripture" data-short="Living Scripture"
+                                data-meta="Lesser Hall // Belief Construction"
+                                data-copy="This Hall preserves stories powerful enough to behave like systems. Repetition here is a form of law."
+                                data-href="hall-livingscripture.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/livingscripture.png"
+                                        alt="Hall of Living Scripture sigil" />
+                                </div>
+                                <div class="label">Living Scripture</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <h2 class="band-title">Lesser Halls // Tier Two</h2>
+                    <div class="lesser-grid">
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Unbroken Seed"
+                                data-name="Hall of Unbroken Seed" data-short="Unbroken Seed"
+                                data-meta="Lesser Hall // Evolution &amp; Species Memory"
+                                data-copy="The body remembers older instructions than the mind admits. This Hall treats adaptation as inheritance made visible."
+                                data-href="hall-unbrokenseed.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/unbrokenseed.png"
+                                        alt="Hall of Unbroken Seed sigil" />
+                                </div>
+                                <div class="label">Unbroken Seed</div>
+                            </button>
+                        </div>
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Remembered Hours"
+                                data-name="Hall of Remembered Hours" data-short="Remembered Hours"
+                                data-meta="Lesser Hall // Time Distortion"
+                                data-copy="Delay, compression, recursion, return. In this Hall, sequence is merely one possible arrangement of consequence."
+                                data-href="hall-rememberedhours.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/rememberedhours.png"
+                                        alt="Hall of Remembered Hours sigil" />
+                                </div>
+                                <div class="label">Remembered Hours</div>
+                            </button>
+                        </div>
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Second Form"
+                                data-name="Hall of Second Form" data-short="Second Form"
+                                data-meta="Lesser Hall // Form &amp; Transformation"
+                                data-copy="Identity of shape is treated as temporary. Matter here is instructed to become persuadable."
+                                data-href="hall-secondform.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/secondform.png"
+                                        alt="Hall of Second Form sigil" />
+                                </div>
+                                <div class="label">Second Form</div>
+                            </button>
+                        </div>
+                        <div class="sigil-item">
+                            <button class="sigil-button" type="button" aria-label="Select Hall of Enduring Self"
+                                data-name="Hall of Enduring Self" data-short="Enduring Self"
+                                data-meta="Lesser Hall // Identity &amp; Soul Architecture"
+                                data-copy="This Hall concerns the arrangement of selfhood. Memory, persona, and continuity are approached as editable design."
+                                data-href="hall-enduringself.html">
+                                <div class="seal">
+                                    <img class="sigil-img" src="../assets/images/sigils/enduringself.png"
+                                        alt="Hall of Enduring Self sigil" />
+                                </div>
+                                <div class="label">Enduring Self</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="panel selected-panel">
+                <h2 class="utility-title">Selected Hall</h2>
+                <h3 id="selected-name">Hall of Waking Dreams</h3>
+                <p class="selected-meta" id="selected-meta">Greater Hall // Perception &amp; Madness</p>
+                <div class="selected-art">
+                    <div class="seal" id="selected-seal">
+                        <img class="sigil-img" id="selected-img" src="../assets/images/sigils/wakingdreams.png"
+                            alt="Hall of Waking Dreams sigil" />
+                    </div>
+                </div>
+                <p class="selected-copy" id="selected-copy">Perfume of jasmine. Chambers lined with chamomile. Amber
+                    remembering what never truly happened. This Hall specialises in disguising terror as calm.</p>
+                <a class="enter-button" id="enter-hall" href="hall-wakingdreams.html">Enter Hall</a>
+            </aside>
+        </section>
+
+        <section class="panel fragments-panel">
+            <h2 class="section-title">Recovered Fragments</h2>
+            <div class="fragments-grid">
+                <article class="fragment">
+                    <div>
+                        <h3>Fragment I</h3>
+                        <p>The chamber outlived its judges, but not their design. The seal remained closed, as if the
+                            Hall could still distinguish between a visitor and a witness.</p>
+                    </div>
+                    <footer>Archive Verified</footer>
+                </article>
+
+                <article class="fragment">
+                    <div>
+                        <h3>Fragment II</h3>
+                        <p>The Hall preserved procedure with perfect fidelity, but procedure alone is a poor imitation
+                            of justice. Its acolytes inherited the form so completely that many forgot to question the
+                            verdict.</p>
+                    </div>
+                    <footer>Restricted Echo</footer>
+                </article>
+
+                <article class="fragment">
+                    <div>
+                        <h3>Fragment III</h3>
+                        <p>Access continued to fail in a manner too deliberate to be called damage. Something within the
+                            lattice still preferred witnesses over intruders.</p>
+                    </div>
+                    <footer>Thread Retained</footer>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const selectedName = document.getElementById('selected-name');
+        const selectedMeta = document.getElementById('selected-meta');
+        const selectedCopy = document.getElementById('selected-copy');
+        const enterHall = document.getElementById('enter-hall');
+        const monitorSelected = document.getElementById('monitor-selected');
+        const selectedImg = document.getElementById('selected-img');
+
+        document.querySelectorAll('.sigil-button').forEach((button) => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.sigil-button').forEach((btn) => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                selectedName.textContent = button.dataset.name;
+                selectedMeta.innerHTML = button.dataset.meta;
+                selectedCopy.textContent = button.dataset.copy;
+                enterHall.setAttribute('href', button.dataset.href);
+                monitorSelected.textContent = button.dataset.short;
+
+                const sourceImg = button.querySelector('.sigil-img');
+                selectedImg.src = sourceImg.src;
+                selectedImg.alt = sourceImg.alt;
+            });
+        });
+    </script>
+</body>
+
+</html>

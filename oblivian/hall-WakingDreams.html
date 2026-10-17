@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hall of Hallucigenesis</title>
+    <style>
+        :root {
+            --bg: #04070d;
+            --panel: rgba(7, 12, 21, 0.95);
+            --line: rgba(92, 151, 222, 0.28);
+            --gold: #f2dfb8;
+            --text: #eef4ff;
+            --muted: #b8c6d9;
+            --accent: #8fd5ff;
+            --hall: #8ec6ad;
+            --amber: #f0c57c;
+            --danger: #ffb8a5;
+            --success: #cfeab9;
+            --radius: 22px;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+            --max: 1560px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background:
+                radial-gradient(circle at top center, rgba(29, 54, 90, 0.2), transparent 24%),
+                linear-gradient(180deg, #03060b 0%, #050811 100%);
+            color: var(--text);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 14px;
+        }
+
+        .page {
+            width: min(100%, var(--max));
+            margin: 0 auto;
+        }
+
+        .panel {
+            position: relative;
+            background: linear-gradient(180deg, rgba(6, 11, 20, 0.95), rgba(5, 9, 16, 0.98));
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 22%);
+        }
+
+        .top-bar {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .top-card {
+            padding: 12px 16px 16px;
+            min-height: 126px;
+        }
+
+        .utility-title, .section-title {
+            margin: 0 0 12px;
+            font-size: 0.78rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .exit-button,
+        .enter-button,
+        .trial-button,
+        .secondary-button,
+        .small-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(242, 223, 184, 0.18);
+            background: linear-gradient(180deg, rgba(242, 223, 184, 0.08), rgba(242, 223, 184, 0.02));
+            color: #f5e6c8;
+            text-decoration: none;
+            font-size: 0.74rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease, opacity 160ms ease;
+            cursor: pointer;
+        }
+
+        .exit-button,
+        .enter-button {
+            width: 100%;
+        }
+
+        .trial-button:hover,
+        .secondary-button:hover,
+        .small-button:hover,
+        .exit-button:hover,
+        .enter-button:hover,
+        .trial-button:focus-visible,
+        .secondary-button:focus-visible,
+        .small-button:focus-visible,
+        .exit-button:focus-visible,
+        .enter-button:focus-visible {
+            border-color: rgba(242, 223, 184, 0.4);
+            box-shadow: 0 0 22px rgba(242, 223, 184, 0.1);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .trial-button[disabled],
+        .secondary-button[disabled],
+        .small-button[disabled] {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .agent-card-copy {
+            margin: 0;
+            text-align: center;
+            color: #e2cd9f;
+            font-size: 0.74rem;
+            letter-spacing: 0.17em;
+            text-transform: uppercase;
+            line-height: 1.6;
+        }
+
+        .agent-card-copy span {
+            display: block;
+            color: #b9c9dd;
+            letter-spacing: 0.11em;
+            font-size: 0.7rem;
+            margin-top: 10px;
+        }
+
+        .monitor-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            color: #ead8b8;
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .monitor-row:last-child { border-bottom: 0; }
+
+        .hero {
+            padding: 18px 26px 20px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            margin: 0 0 10px;
+            color: var(--gold);
+            font-size: 0.74rem;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(2.25rem, 4vw, 4.6rem);
+            line-height: 1.03;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #fff0cf;
+            text-shadow: 0 0 14px rgba(240, 221, 181, 0.12);
+        }
+
+        .subcopy {
+            margin: 14px auto 0;
+            max-width: 94ch;
+            width: 100%;
+            text-align: center;
+            color: #dcc9a6;
+            line-height: 1.7;
+            font-size: 0.98rem;
+        }
+
+        .subcopy .breakline { display: block; }
+
+        .hero-flags {
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .flag {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(240, 221, 181, 0.16);
+            background: rgba(240, 221, 181, 0.04);
+            color: #ead9b7;
+            font-size: 0.7rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.75fr) 340px;
+            gap: 18px;
+            align-items: start;
+            margin-bottom: 18px;
+        }
+
+        .trial-stack {
+            display: grid;
+            gap: 18px;
+        }
+
+        .trial-panel { padding: 18px 20px 20px; }
+
+        .trial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 16px;
+        }
+
+        .trial-header h2 {
+            margin: 0 0 8px;
+            color: #fff0cf;
+            font-size: 1.12rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .trial-kicker {
+            margin: 0;
+            color: #d2bd93;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .trial-copy {
+            margin: 0 0 18px;
+            color: #d8e0ed;
+            line-height: 1.8;
+            font-size: 0.96rem;
+        }
+
+        .status-pill {
+            flex-shrink: 0;
+            min-width: 138px;
+            text-align: center;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(143, 213, 255, 0.16);
+            background: rgba(143, 213, 255, 0.05);
+            color: var(--accent);
+            font-size: 0.7rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .status-pill.locked {
+            color: #d3ba8f;
+            border-color: rgba(242, 223, 184, 0.14);
+            background: rgba(242, 223, 184, 0.04);
+        }
+
+        .trial-stage {
+            border: 1px solid rgba(143, 213, 255, 0.12);
+            border-radius: 18px;
+            padding: 16px;
+            background: rgba(5, 10, 18, 0.82);
+            margin-bottom: 16px;
+        }
+
+        .trial-stage:last-child { margin-bottom: 0; }
+
+        .trial-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .trial-metric {
+            border-radius: 16px;
+            padding: 14px 14px 12px;
+            border: 1px solid rgba(242, 223, 184, 0.12);
+            background: rgba(242, 223, 184, 0.03);
+        }
+
+        .trial-metric span {
+            display: block;
+            color: #d0bb90;
+            font-size: 0.66rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .trial-metric strong {
+            display: block;
+            color: #f4ead4;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .flash-arena {
+            position: relative;
+            min-height: 360px;
+            border-radius: 20px;
+            border: 1px solid rgba(241, 198, 114, 0.14);
+            background:
+                radial-gradient(circle at center, rgba(81, 53, 13, 0.22), transparent 58%),
+                linear-gradient(180deg, rgba(20, 14, 8, 0.88), rgba(6, 8, 12, 0.96));
+            overflow: hidden;
+        }
+
+        .flash-arena.running { box-shadow: inset 0 0 50px rgba(240, 197, 124, 0.06); }
+
+        .flash-dot {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: blinkDot 520ms ease;
+            pointer-events: none;
+        }
+
+        @keyframes blinkDot {
+            0% { opacity: 0; transform: scale(0.35); }
+            22% { opacity: 0.88; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.45); }
+        }
+
+        .white-flash {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.98);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 180ms ease;
+            z-index: 5;
+        }
+
+        .white-flash.active { opacity: 1; }
+
+        .observation-room {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at center, rgba(230, 210, 165, 0.14), transparent 48%),
+                linear-gradient(180deg, rgba(35, 27, 18, 0.75), rgba(8, 10, 14, 0.92));
+            transition: opacity 200ms ease;
+        }
+
+        .observation-room.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .room-rings {
+            position: absolute;
+            inset: 10% 12%;
+            border-radius: 50%;
+            border: 1px solid rgba(242, 223, 184, 0.08);
+            box-shadow: 0 0 60px rgba(242, 223, 184, 0.05);
+        }
+
+        .room-rings::before,
+        .room-rings::after {
+            content: "";
+            position: absolute;
+            inset: 10%;
+            border-radius: 50%;
+            border: 1px solid rgba(242, 223, 184, 0.06);
+        }
+
+        .room-rings::after { inset: 22%; }
+
+        .observation-object {
+            position: absolute;
+            width: 94px;
+            height: 94px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(10, 14, 24, 0.74);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+            color: #ead7b4;
+            font-size: 0.66rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            backdrop-filter: blur(2px);
+            overflow: hidden;
+        }
+
+        .observation-object img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 16px rgba(240, 197, 124, 0.15));
+        }
+
+        .observation-object.fallback img { display: none; }
+
+        .observation-object .fallback-label {
+            display: none;
+            line-height: 1.45;
+        }
+
+        .observation-object.fallback .fallback-label { display: block; }
+
+        .sigil-ghost {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 220px;
+            height: 220px;
+            transform: translate(-50%, -50%) scale(0.62);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 4;
+            filter: drop-shadow(0 0 28px rgba(241, 196, 119, 0.25));
+        }
+
+        .sigil-ghost.active {
+            animation: sigilApproach 1200ms ease forwards;
+        }
+
+        @keyframes sigilApproach {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.62); }
+            20% { opacity: 0.34; }
+            75% { opacity: 0.18; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.12); }
+        }
+
+        .trial-form {
+            display: grid;
+            gap: 14px;
+        }
+
+        .field-label {
+            display: block;
+            margin: 0 0 8px;
+            color: #e6d7bb;
+            font-size: 0.75rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            min-height: 46px;
+            border-radius: 14px;
+            border: 1px solid rgba(143, 213, 255, 0.18);
+            background: rgba(7, 13, 22, 0.92);
+            color: #f0f4fb;
+            padding: 0 14px;
+            font-size: 1rem;
+        }
+
+        .object-options {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .option-card {
+            border-radius: 14px;
+            border: 1px solid rgba(242, 223, 184, 0.12);
+            background: rgba(242, 223, 184, 0.03);
+            overflow: hidden;
+        }
+
+        .option-card label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 12px;
+            cursor: pointer;
+            min-height: 64px;
+            color: #dfebfa;
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .option-card input { accent-color: var(--amber); }
+
+        .inline-actions,
+        .wager-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .verdict-box,
+        .offer-box,
+        .wager-box,
+        .residual-box {
+            margin-top: 16px;
+            border-radius: 18px;
+            padding: 16px;
+            border: 1px solid rgba(143, 213, 255, 0.16);
+            background: rgba(143, 213, 255, 0.04);
+        }
+
+        .verdict-title,
+        .residual-title,
+        .offer-title,
+        .wager-title {
+            margin: 0 0 8px;
+            color: #fff0cf;
+            font-size: 0.8rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .verdict-box p,
+        .offer-box p,
+        .wager-box p,
+        .residual-box p {
+            margin: 0;
+            color: #dbe4f1;
+            line-height: 1.7;
+            font-size: 0.94rem;
+        }
+
+        .residual-value,
+        .aegis-score {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            min-height: 60px;
+            padding: 10px 14px;
+            border-radius: 18px;
+            border: 1px solid rgba(240, 197, 124, 0.22);
+            background: radial-gradient(circle at center, rgba(240, 197, 124, 0.22), rgba(240, 197, 124, 0.05) 70%);
+            color: #fff0cf;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            margin-right: 14px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .memory-card {
+            position: relative;
+            aspect-ratio: 0.72;
+            border: 1px solid rgba(240, 197, 124, 0.14);
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(31, 20, 9, 0.92), rgba(10, 12, 16, 0.98));
+            color: #f7e7c5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 160ms ease, border-color 160ms ease, opacity 220ms ease;
+        }
+
+        .memory-card::before {
+            content: "";
+            position: absolute;
+            inset: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(240, 197, 124, 0.08);
+        }
+
+        .memory-card:hover,
+        .memory-card:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(240, 197, 124, 0.3);
+            outline: none;
+        }
+
+        .memory-card .card-face {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: stretch;
+            justify-content: stretch;
+            transition: opacity 180ms ease;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .memory-card .card-back,
+        .memory-card .card-front {
+            background:
+                radial-gradient(circle at center, rgba(240, 197, 124, 0.08), transparent 56%),
+                linear-gradient(180deg, rgba(34, 21, 8, 0.96), rgba(10, 12, 16, 1));
+        }
+
+        .memory-card .card-front {
+            opacity: 0;
+        }
+
+        .memory-card .card-face-shell {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(7, 8, 12, 0.65);
+            box-shadow: inset 0 0 0 1px rgba(242, 223, 184, 0.08);
+        }
+
+        .memory-card .card-art {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .memory-card .card-fallback-value {
+            position: absolute;
+            inset: auto 8px 8px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            padding: 6px 8px;
+            border-radius: 12px;
+            background: rgba(8, 12, 18, 0.78);
+            border: 1px solid rgba(242, 223, 184, 0.16);
+            color: #fff3d5;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .memory-card .card-overlay-badge {
+            position: absolute;
+            left: 50%;
+            bottom: 8px;
+            transform: translateX(-50%);
+            max-width: calc(100% - 16px);
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(242, 223, 184, 0.16);
+            background: rgba(7, 10, 15, 0.72);
+            color: #f2dfb8;
+            font-size: 0.58rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .memory-card .card-overlay-badge.subtle {
+            color: #dbc699;
+            border-color: rgba(242, 223, 184, 0.08);
+            background: rgba(7, 10, 15, 0.52);
+        }
+
+        .memory-card.revealed .card-back { opacity: 0; }
+        .memory-card.revealed .card-front { opacity: 1; }
+        .memory-card.matched { opacity: 0; pointer-events: none; transform: scale(0.88); }
+
+        .memory-card.residual-lock {
+            background: linear-gradient(180deg, rgba(39, 27, 8, 0.92), rgba(8, 11, 16, 0.98));
+            border-color: rgba(242, 223, 184, 0.22);
+            cursor: default;
+        }
+
+        .memory-card.residual-lock .card-overlay-badge {
+            font-size: 0.54rem;
+            letter-spacing: 0.15em;
+        }
+
+        .memory-card.residual-lock.active .card-front { opacity: 1; }
+        .memory-card.residual-lock.active .card-back { opacity: 0; }
+
+        .selected-panel {
+            padding: 16px 18px 20px;
+            position: sticky;
+            top: 14px;
+        }
+
+        .selected-panel h3 {
+            margin: 0 0 10px;
+            color: #fff0cf;
+            font-size: 1.05rem;
+            line-height: 1.1;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .selected-meta {
+            margin: 0 0 14px;
+            color: #d2bd93;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .selected-art {
+            width: 210px;
+            height: 210px;
+            margin: 12px auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .seal {
+            width: 210px;
+            height: 210px;
+            margin: 0;
+            border-radius: 50%;
+            border: 1px solid rgba(228, 203, 144, 0.46);
+            background: radial-gradient(circle at center, rgba(88, 133, 120, 0.28) 0%, rgba(26, 40, 38, 0.92) 72%);
+            box-shadow: 0 0 26px rgba(92, 201, 186, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .sigil-img {
+            display: block;
+            width: 72%;
+            height: 72%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(243, 223, 181, 0.18));
+        }
+
+        .status-list {
+            display: grid;
+            gap: 10px;
+            margin: 0 0 18px;
+        }
+
+        .status-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            color: #e7d3ad;
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .status-line:last-child { border-bottom: 0; }
+
+        .selected-copy {
+            margin: 0 0 18px;
+            color: #e2d0b0;
+            font-size: 0.95rem;
+            line-height: 1.72;
+        }
+
+        .fragments-panel { padding: 18px 22px 22px; }
+
+        .fragments-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .fragment {
+            min-height: 220px;
+            padding: 16px 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(105, 180, 255, 0.2);
+            background: rgba(4, 10, 19, 0.94);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .fragment h3 {
+            margin: 0 0 12px;
+            font-size: 0.74rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #eef4ff;
+        }
+
+        .fragment p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 0.96rem;
+        }
+
+        .fragment footer {
+            margin-top: 18px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(111, 175, 248, 0.16);
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+        }
+
+        .hidden { display: none !important; }
+
+        .tone-success { color: var(--success); }
+        .tone-danger { color: var(--danger); }
+        .tone-amber { color: var(--amber); }
+
+        /* Updated Aegis Eye */
+        #aegis-eye-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            margin: 2px auto 10px;
+            pointer-events: none;
+        }
+
+        #aegis-eye {
+            position: relative;
+            width: 104px;
+            height: 58px;
+            border-radius: 100px / 58px;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            overflow: hidden;
+            box-shadow:
+                0 0 12px rgba(255, 255, 255, 0.16),
+                0 0 26px rgba(255, 255, 255, 0.10),
+                inset 0 0 22px rgba(255, 255, 255, 0.06);
+            background:
+                radial-gradient(ellipse at center, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0) 74%),
+                linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+            transition: transform 120ms linear, opacity 240ms ease, filter 240ms ease;
+            opacity: 0.92;
+        }
+
+        #aegis-eye::before,
+        #aegis-eye::after {
+            content: "";
+            position: absolute;
+            left: -3%;
+            width: 106%;
+            height: 46%;
+            background: linear-gradient(180deg, rgba(2,6,12,0.92), rgba(8,12,18,0.24));
+            transition: transform 240ms ease;
+            pointer-events: none;
+        }
+
+        #aegis-eye::before {
+            top: -8%;
+            border-bottom: 1px solid rgba(255,255,255,0.14);
+            border-radius: 0 0 60% 60% / 0 0 100% 100%;
+        }
+
+        #aegis-eye::after {
+            bottom: -8%;
+            height: 42%;
+            background: linear-gradient(180deg, rgba(8,12,18,0.18), rgba(2,6,12,0.92));
+            border-top: 1px solid rgba(255,255,255,0.10);
+            border-radius: 60% 60% 0 0 / 100% 100% 0 0;
+        }
+
+        #aegis-eye .iris-ring {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 38px;
+            height: 38px;
+            margin-left: -19px;
+            margin-top: -19px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.18);
+            background:
+                radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 60%, rgba(255,255,255,0) 74%);
+            box-shadow: 0 0 12px rgba(255,255,255,0.06);
+        }
+
+        #aegis-pupil {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 22px;
+            height: 22px;
+            margin-left: -11px;
+            margin-top: -11px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.92) 28%, rgba(255,255,255,0.34) 62%, rgba(255,255,255,0.12) 74%, rgba(255,255,255,0) 82%);
+            box-shadow:
+                0 0 10px rgba(255,255,255,0.95),
+                0 0 24px rgba(255,255,255,0.42);
+            transition: transform 100ms linear, background 180ms ease, box-shadow 180ms ease;
+        }
+
+        #aegis-eye.blink::before { transform: translateY(12px); }
+        #aegis-eye.blink::after { transform: translateY(-11px); }
+
+        #aegis-message {
+            width: min(100%, 220px);
+            max-width: 220px;
+            text-align: center;
+            padding: 8px 10px;
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 11px;
+            line-height: 1.45;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(0, 0, 0, 0.48);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 0 18px rgba(255, 255, 255, 0.06);
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 220ms ease, transform 220ms ease;
+        }
+
+        #aegis-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #aegis-eye.focused {
+            filter: brightness(1.18);
+            box-shadow:
+                0 0 16px rgba(255, 255, 255, 0.24),
+                0 0 34px rgba(255, 255, 255, 0.16),
+                inset 0 0 20px rgba(255,255,255,0.12);
+        }
+
+        #aegis-eye.warning { filter: brightness(1.32); }
+
+        #aegis-eye.warning #aegis-pupil {
+            box-shadow:
+                0 0 12px rgba(255,255,255,1),
+                0 0 28px rgba(255,255,255,0.66);
+        }
+
+        @media (max-width: 1200px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .selected-panel { position: static; }
+        }
+
+        @media (max-width: 980px) {
+            .top-bar,
+            .fragments-grid,
+            .object-options {
+                grid-template-columns: 1fr;
+            }
+
+            .card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .trial-meta-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 760px) {
+            .trial-header { flex-direction: column; }
+            .object-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 10px; }
+            .hero { padding: 18px 16px 18px; }
+            .hero h1 { letter-spacing: 0.08em; }
+            .selected-art, .seal { width: 170px; height: 170px; }
+            .flash-arena { min-height: 320px; }
+            .observation-object { width: 78px; height: 78px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="top-bar">
+            <section class="panel top-card">
+                <h2 class="utility-title">Exit Route</h2>
+                <a class="exit-button" href="/oblivian/index.html">Return to Halls</a>
+            </section>
+
+            <section class="panel top-card">
+                <h2 class="utility-title">Aegis Agent</h2>
+                <div id="aegis-eye-container" aria-hidden="true">
+                    <div id="aegis-eye">
+                        <div class="iris-ring"></div>
+                        <div id="aegis-pupil"></div>
+                    </div>
+                    <div id="aegis-message">Judicial optics aligned.</div>
+                </div>
+                <p class="agent-card-copy">Hallucigenesis retains your imprint.<span>Perception is under review.</span></p>
+            </section>
+
+            <section class="panel top-card">
+                <h2 class="utility-title">Judicial Monitor</h2>
+                <div class="monitor-row"><span>Observer Status</span><span id="monitor-observer-status">Recognised</span></div>
+                <div class="monitor-row"><span>Trial I</span><span id="monitor-trial1-status">Awaiting Witness</span></div>
+                <div class="monitor-row"><span>Trial II</span><span id="monitor-trial2-status">Locked</span></div>
+                <div class="monitor-row"><span>Amber Augury</span><span id="monitor-augury-status">Unclaimed</span></div>
+            </section>
+        </section>
+
+        <section class="panel hero">
+            <p class="eyebrow">Oblivian Layer // Hall Interface</p>
+            <h1>Hall of Hallucigenesis</h1>
+            <p class="subcopy">
+                This Hall does not test strength. It tests notice, appetite, and whether calm can still be trusted once terror has learned to wear its face.
+                <span class="breakline">To see clearly is not the same as seeing truly.</span>
+            </p>
+            <div class="hero-flags">
+                <span class="flag">Relic Presence: Somnus Coil</span>
+                <span class="flag">Trial Sequence Loaded</span>
+                <span class="flag">Amber Memory Active</span>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <section class="trial-stack">
+                <section class="panel trial-panel" id="trial-one-panel">
+                    <div class="trial-header">
+                        <div>
+                            <p class="trial-kicker">Trial I // Observation & Recall</p>
+                            <h2>The Absence of Everything</h2>
+                        </div>
+                        <div class="status-pill" id="trial-one-pill">Available</div>
+                    </div>
+                    <p class="trial-copy">Scattered lights are not decoration. Count them. Endure the flash. When the room appears, notice what lesser witnesses would dismiss as furnishings, clutter, or nothing at all.</p>
+
+                    <div class="trial-stage">
+                        <div class="flash-arena" id="flash-arena">
+                            <div class="white-flash" id="white-flash"></div>
+                            <div class="observation-room" id="observation-room">
+                                <div class="room-rings"></div>
+                                <img class="sigil-ghost" id="sigil-ghost" src="../assets/images/sigils/hallucigenesis.png" alt="Hallucigenesis sigil" />
+                            </div>
+                        </div>
+                        <div class="trial-meta-grid">
+                            <div class="trial-metric"><span>Flash Sequence</span><strong id="flash-sequence-status">Not Started</strong></div>
+                            <div class="trial-metric"><span>Witness Prompt</span><strong id="witness-prompt">Awaiting Notice</strong></div>
+                            <div class="trial-metric"><span>Recorded Verdict</span><strong id="trial-one-quick-verdict">None</strong></div>
+                        </div>
+                        <div class="inline-actions">
+                            <button class="trial-button" id="start-trial-one">Begin Observation</button>
+                            <button class="secondary-button hidden" id="replay-trial-one">Repeat Sequence</button>
+                        </div>
+                    </div>
+
+                    <div class="trial-stage hidden" id="trial-one-form-stage">
+                        <form class="trial-form" id="trial-one-form">
+                            <div>
+                                <label class="field-label" for="flash-count-input">How many flashes were observed?</label>
+                                <input type="number" id="flash-count-input" min="0" step="1" inputmode="numeric" />
+                            </div>
+                            <div>
+                                <span class="field-label">Which objects were present in the room?</span>
+                                <div class="object-options" id="object-options"></div>
+                            </div>
+                            <div class="inline-actions">
+                                <button class="trial-button" type="submit">Submit Witness Account</button>
+                                <button class="secondary-button" type="button" id="clear-trial-one">Clear Account</button>
+                            </div>
+                        </form>
+                        <div class="verdict-box hidden" id="trial-one-verdict-box">
+                            <h3 class="verdict-title" id="trial-one-verdict-title">Verdict Recorded</h3>
+                            <p id="trial-one-verdict-copy"></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel trial-panel" id="trial-two-panel">
+                    <div class="trial-header">
+                        <div>
+                            <p class="trial-kicker">Trial II // Appetite & Chance</p>
+                            <h2>The Amber Gambler</h2>
+                        </div>
+                        <div class="status-pill locked" id="trial-two-pill">Locked</div>
+                    </div>
+                    <p class="trial-copy">Twenty pairs hide their likenesses in plain sight. One card does not belong to memory. Clear the known. Accept what remains. Then decide whether fortune is a gift or simply a hand extended far enough to take something back.</p>
+
+                    <div class="trial-stage">
+                        <div class="trial-meta-grid">
+                            <div class="trial-metric"><span>Pairs Cleared</span><strong id="pairs-cleared">0 / 10</strong></div>
+                            <div class="trial-metric"><span>Mismatches</span><strong id="mismatch-count">0</strong></div>
+                            <div class="trial-metric"><span>Elapsed Time</span><strong id="trial-two-time">0.0s</strong></div>
+                        </div>
+                        <div class="inline-actions">
+                            <button class="trial-button" id="start-trial-two" disabled>Begin The Amber Gambler</button>
+                            <button class="secondary-button hidden" id="reset-trial-two">Reset Cards</button>
+                        </div>
+                    </div>
+
+                    <div class="trial-stage hidden" id="trial-two-board-stage">
+                        <div class="card-grid" id="card-grid"></div>
+                        <div class="residual-box hidden" id="residual-box">
+                            <h3 class="residual-title">Residual Card Revealed</h3>
+                            <p><span class="residual-value" id="residual-value">0</span><span id="residual-copy">The Hall leaves one truth behind.</span></p>
+                        </div>
+                        <div class="offer-box hidden" id="offer-box">
+                            <h3 class="offer-title">Amber Augury Offered</h3>
+                            <p id="offer-copy">A favourable remnant remains. The Hall offers an Amber Augury. Will you wager it against the Aegis?</p>
+                            <div class="wager-actions" style="margin-top: 14px;">
+                                <button class="trial-button" id="play-hand-button">Play Hand</button>
+                                <button class="secondary-button" id="refuse-hand-button">Refuse Token</button>
+                            </div>
+                        </div>
+                        <div class="wager-box hidden" id="wager-box">
+                            <h3 class="wager-title">Aegis Challenge</h3>
+                            <p><span class="aegis-score" id="aegis-score">--</span><span id="wager-copy">Aegis score pending. Ties favour the Aegis.</span></p>
+                        </div>
+                        <div class="verdict-box hidden" id="trial-two-verdict-box">
+                            <h3 class="verdict-title" id="trial-two-verdict-title">Trial II Recorded</h3>
+                            <p id="trial-two-verdict-copy"></p>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <aside class="panel selected-panel">
+                <h2 class="utility-title">Selected Hall</h2>
+                <h3>Hall of Hallucigenesis</h3>
+                <p class="selected-meta">Greater Hall // Perception &amp; Madness</p>
+                <div class="selected-art">
+                    <div class="seal">
+                        <img class="sigil-img" src="../assets/images/sigils/hallucigenesis.png" alt="Hall of Hallucigenesis sigil" />
+                    </div>
+                </div>
+                <p class="selected-copy">Perfume of jasmine. Chambers lined with chamomile. Amber remembering what never truly happened. This Hall specialises in disguising terror as calm.</p>
+                <div class="status-list">
+                    <div class="status-line"><span>Trial I Verdict</span><span id="side-trial-one">None</span></div>
+                    <div class="status-line"><span>Trial II Verdict</span><span id="side-trial-two">Locked</span></div>
+                    <div class="status-line"><span>Amber Augury</span><span id="side-augury">No</span></div>
+                    <div class="status-line"><span>Prudence Marker</span><span id="side-prudence">None</span></div>
+                </div>
+                <button class="enter-button" id="reset-hall-progress">Reset Hall Record</button>
+            </aside>
+        </section>
+
+        <section class="panel fragments-panel">
+            <h2 class="section-title">Recovered Fragments</h2>
+            <div class="fragments-grid">
+                <article class="fragment">
+                    <div>
+                        <h3>Fragment I // Trial Doctrine</h3>
+                        <p>The first trial does not ask whether the witness looked. It asks whether looking was enough. Hallucigenesis has always understood that most people see merely to reassure themselves that the world is still where they left it.</p>
+                    </div>
+                    <footer id="fragment-one-footer">Observation Pending</footer>
+                </article>
+
+                <article class="fragment">
+                    <div>
+                        <h3>Fragment II // Residual Wager</h3>
+                        <p>Chance was never innocent in this Hall. It was a judicial instrument disguised as invitation. The hand extended to offer favour was often the same hand that later recorded the loss.</p>
+                    </div>
+                    <footer id="fragment-two-footer">Wager Not Initiated</footer>
+                </article>
+
+                <article class="fragment">
+                    <div>
+                        <h3>Fragment III // Journal Record</h3>
+                        <p id="journal-fragment-copy">No stable witness account has yet been retained. The Hall remains attentive.</p>
+                    </div>
+                    <footer id="fragment-three-footer">Thread Unwritten</footer>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const STORAGE_KEY = 'mnemosyne_hall_hallucigenesis';
+        const JOURNAL_KEY = 'mnemosyne_hall_journal';
+
+        const TRIAL_ONE_CONFIG = {
+            flashDurationMs: 10000,
+            revealDurationMs: 1350,
+            sigilPath: '../assets/images/sigils/hallucigenesis.png',
+            validObjects: [
+                { id: 'somnus-vial', label: 'Somnus Vial', src: '../assets/images/trials/hallucigenesis/somnus-vial.png', x: '11%', y: '20%' },
+                { id: 'amber-needle', label: 'Amber Needle', src: '../assets/images/trials/hallucigenesis/amber-needle.png', x: '28%', y: '11%' },
+                { id: 'chamomile-censer', label: 'Chamomile Censer', src: '../assets/images/trials/hallucigenesis/chamomile-censer.png', x: '47%', y: '18%' },
+                { id: 'glass-mask', label: 'Glass Mask', src: '../assets/images/trials/hallucigenesis/glass-mask.png', x: '69%', y: '12%' },
+                { id: 'coil-reel', label: 'Coil Reel', src: '../assets/images/trials/hallucigenesis/coil-reel.png', x: '18%', y: '62%' },
+                { id: 'amber-prayer', label: 'Amber Prayer Disc', src: '../assets/images/trials/hallucigenesis/amber-prayer.png', x: '39%', y: '69%' },
+                { id: 'sleep-bell', label: 'Sleep Bell', src: '../assets/images/trials/hallucigenesis/sleep-bell.png', x: '61%', y: '64%' },
+                { id: 'pollen-frame', label: 'Pollen Frame', src: '../assets/images/trials/hallucigenesis/pollen-frame.png', x: '79%', y: '55%' }
+            ],
+            distractors: [
+                { id: 'black-feather', label: 'Black Feather' },
+                { id: 'gold-thread', label: 'Gold Thread' },
+                { id: 'ivory-key', label: 'Ivory Key' },
+                { id: 'mirror-shard', label: 'Mirror Shard' },
+                { id: 'jade-compass', label: 'Jade Compass' },
+                { id: 'obsidian-cup', label: 'Obsidian Cup' },
+                { id: 'wire-rose', label: 'Wire Rose' },
+                { id: 'copper-seal', label: 'Copper Seal' }
+            ]
+        };
+
+        const TRIAL_TWO_CONFIG = {
+            cardBackPath: '../assets/images/trials/hallucigenesis/cards/card-top.png',
+            cardFacePaths: {
+                1: '../assets/images/trials/hallucigenesis/cards/card1.png',
+                2: '../assets/images/trials/hallucigenesis/cards/card2.png',
+                3: '../assets/images/trials/hallucigenesis/cards/card3.png',
+                4: '../assets/images/trials/hallucigenesis/cards/card4.png',
+                5: '../assets/images/trials/hallucigenesis/cards/card5.png',
+                6: '../assets/images/trials/hallucigenesis/cards/card6.png',
+                7: '../assets/images/trials/hallucigenesis/cards/card7.png',
+                8: '../assets/images/trials/hallucigenesis/cards/card8.png',
+                9: '../assets/images/trials/hallucigenesis/cards/card9.png',
+                10: '../assets/images/trials/hallucigenesis/cards/card10.png',
+                11: '../assets/images/trials/hallucigenesis/cards/card11.png',
+                12: '../assets/images/trials/hallucigenesis/cards/card12.png',
+                13: '../assets/images/trials/hallucigenesis/cards/card13.png'
+            }
+        };
+
+        const residualBands = {
+            poor: [1, 2, 3, 4, 5],
+            moderate: [6, 7, 8, 9],
+            excellent: [10, 11, 12, 13]
+        };
+
+        const verdictCopy = {
+            trial1: {
+                'Perfect Recall': 'Observation confirmed. You noticed what lesser minds allow to pass unmarked.',
+                'Partial Recall': 'Attention was present, though not yet disciplined. The Hall permits progression.',
+                'Distorted Recall': 'The eye was open. The mind embellished. Proceed with caution.',
+                'Unwitnessed': 'No reliable account was submitted. The Hall records absence where notice was required.'
+            },
+            trial2: {
+                'Withheld by Choice': 'The offered omen was declined. Restraint recorded. No Amber Augury carried forward.',
+                'Forfeited': 'Appetite exceeded judgement. The offered omen has been reclaimed.',
+                'Secured': 'Amber Augury preserved. A favourable variance has been entered into your record.',
+                'No Offer Extended': 'The Hall left no favourable omen behind. Memory was judged insufficient to invite the wager.',
+                'Locked': 'The Amber Gambler remains sealed until a witness account is submitted.',
+                'Available': 'The Amber Gambler has acknowledged your witness account and is ready to begin.'
+            }
+        };
+
+        const state = loadState();
+        let trialOneRun = {
+            flashes: 0,
+            running: false,
+            timeoutIds: []
+        };
+        let trialTwoTimerId = null;
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = false;
+
+        const els = {
+            monitorObserverStatus: document.getElementById('monitor-observer-status'),
+            monitorTrial1Status: document.getElementById('monitor-trial1-status'),
+            monitorTrial2Status: document.getElementById('monitor-trial2-status'),
+            monitorAuguryStatus: document.getElementById('monitor-augury-status'),
+            trialOnePill: document.getElementById('trial-one-pill'),
+            trialTwoPill: document.getElementById('trial-two-pill'),
+            flashArena: document.getElementById('flash-arena'),
+            whiteFlash: document.getElementById('white-flash'),
+            observationRoom: document.getElementById('observation-room'),
+            sigilGhost: document.getElementById('sigil-ghost'),
+            flashSequenceStatus: document.getElementById('flash-sequence-status'),
+            witnessPrompt: document.getElementById('witness-prompt'),
+            trialOneQuickVerdict: document.getElementById('trial-one-quick-verdict'),
+            startTrialOne: document.getElementById('start-trial-one'),
+            replayTrialOne: document.getElementById('replay-trial-one'),
+            trialOneFormStage: document.getElementById('trial-one-form-stage'),
+            objectOptions: document.getElementById('object-options'),
+            trialOneForm: document.getElementById('trial-one-form'),
+            flashCountInput: document.getElementById('flash-count-input'),
+            clearTrialOne: document.getElementById('clear-trial-one'),
+            trialOneVerdictBox: document.getElementById('trial-one-verdict-box'),
+            trialOneVerdictTitle: document.getElementById('trial-one-verdict-title'),
+            trialOneVerdictCopy: document.getElementById('trial-one-verdict-copy'),
+            startTrialTwo: document.getElementById('start-trial-two'),
+            resetTrialTwo: document.getElementById('reset-trial-two'),
+            trialTwoBoardStage: document.getElementById('trial-two-board-stage'),
+            cardGrid: document.getElementById('card-grid'),
+            pairsCleared: document.getElementById('pairs-cleared'),
+            mismatchCount: document.getElementById('mismatch-count'),
+            trialTwoTime: document.getElementById('trial-two-time'),
+            residualBox: document.getElementById('residual-box'),
+            residualValue: document.getElementById('residual-value'),
+            residualCopy: document.getElementById('residual-copy'),
+            offerBox: document.getElementById('offer-box'),
+            offerCopy: document.getElementById('offer-copy'),
+            playHandButton: document.getElementById('play-hand-button'),
+            refuseHandButton: document.getElementById('refuse-hand-button'),
+            wagerBox: document.getElementById('wager-box'),
+            aegisScore: document.getElementById('aegis-score'),
+            wagerCopy: document.getElementById('wager-copy'),
+            trialTwoVerdictBox: document.getElementById('trial-two-verdict-box'),
+            trialTwoVerdictTitle: document.getElementById('trial-two-verdict-title'),
+            trialTwoVerdictCopy: document.getElementById('trial-two-verdict-copy'),
+            sideTrialOne: document.getElementById('side-trial-one'),
+            sideTrialTwo: document.getElementById('side-trial-two'),
+            sideAugury: document.getElementById('side-augury'),
+            sidePrudence: document.getElementById('side-prudence'),
+            resetHallProgress: document.getElementById('reset-hall-progress'),
+            fragmentOneFooter: document.getElementById('fragment-one-footer'),
+            fragmentTwoFooter: document.getElementById('fragment-two-footer'),
+            fragmentThreeFooter: document.getElementById('fragment-three-footer'),
+            journalFragmentCopy: document.getElementById('journal-fragment-copy'),
+            aegisEye: document.getElementById('aegis-eye'),
+            aegisPupil: document.getElementById('aegis-pupil'),
+            aegisMessage: document.getElementById('aegis-message')
+        };
+
+        buildObservationRoom();
+        buildObjectOptions();
+        hydrateFromState();
+        wireEvents();
+        initAegisEye();
+
+        function loadState() {
+            const fallback = {
+                trial1: {
+                    submitted: false,
+                    flashCountActual: null,
+                    flashCountGuess: '',
+                    selectedObjectIds: [],
+                    verdict: null,
+                    scoreBand: null,
+                    modifier: 0
+                },
+                trial2: {
+                    unlocked: false,
+                    started: false,
+                    completed: false,
+                    pairsCleared: 0,
+                    mismatches: 0,
+                    moves: 0,
+                    elapsedMs: 0,
+                    startTime: null,
+                    residualValue: null,
+                    verdict: 'Locked',
+                    augury: false,
+                    prudence: 'None',
+                    aegisScore: null,
+                    board: []
+                }
+            };
+
+            try {
+                const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                return parsed ? mergeDeep(fallback, parsed) : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function mergeDeep(base, incoming) {
+            const output = structuredClone(base);
+            for (const key in incoming) {
+                if (incoming[key] && typeof incoming[key] === 'object' && !Array.isArray(incoming[key]) && output[key]) {
+                    output[key] = mergeDeep(output[key], incoming[key]);
+                } else {
+                    output[key] = incoming[key];
+                }
+            }
+            return output;
+        }
+
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            syncJournal();
+        }
+
+        function syncJournal() {
+            const existing = JSON.parse(localStorage.getItem(JOURNAL_KEY) || '{}');
+            existing.hallucigenesis = {
+                hall: 'Hall of Hallucigenesis',
+                trial1Verdict: state.trial1.verdict,
+                trial2Verdict: state.trial2.verdict,
+                amberAugury: state.trial2.augury,
+                prudence: state.trial2.prudence,
+                residualValue: state.trial2.residualValue
+            };
+            localStorage.setItem(JOURNAL_KEY, JSON.stringify(existing));
+        }
+
+        function wireEvents() {
+            els.startTrialOne.addEventListener('click', startTrialOneSequence);
+            els.replayTrialOne.addEventListener('click', startTrialOneSequence);
+            els.clearTrialOne.addEventListener('click', clearTrialOneForm);
+            els.trialOneForm.addEventListener('submit', handleTrialOneSubmit);
+            els.startTrialTwo.addEventListener('click', startTrialTwo);
+            els.resetTrialTwo.addEventListener('click', () => {
+                if (state.trial2.completed && state.trial2.augury) return;
+                resetTrialTwoState(true);
+                startTrialTwo();
+            });
+            els.playHandButton.addEventListener('click', resolveAegisWager);
+            els.refuseHandButton.addEventListener('click', refuseAugury);
+            els.resetHallProgress.addEventListener('click', resetHallProgress);
+        }
+
+        function hydrateFromState() {
+            els.sigilGhost.src = TRIAL_ONE_CONFIG.sigilPath;
+            if (state.trial1.submitted) {
+                els.trialOneFormStage.classList.remove('hidden');
+                els.replayTrialOne.classList.remove('hidden');
+                els.flashSequenceStatus.textContent = 'Recorded';
+                els.witnessPrompt.textContent = 'Account Submitted';
+                els.trialOneQuickVerdict.textContent = state.trial1.verdict || 'Recorded';
+                els.flashCountInput.value = state.trial1.flashCountGuess || '';
+                for (const id of state.trial1.selectedObjectIds || []) {
+                    const input = els.objectOptions.querySelector(`input[value="${id}"]`);
+                    if (input) input.checked = true;
+                }
+                renderTrialOneVerdict();
+            }
+
+            if (state.trial2.unlocked) {
+                unlockTrialTwo(false);
+            }
+
+            if (state.trial2.started || state.trial2.completed || (state.trial2.board && state.trial2.board.length)) {
+                renderTrialTwoBoard();
+                els.trialTwoBoardStage.classList.remove('hidden');
+                els.resetTrialTwo.classList.remove('hidden');
+            }
+
+            if (state.trial2.completed) {
+                renderTrialTwoOutcome();
+            }
+
+            updateMonitor();
+        }
+
+        function buildObservationRoom() {
+            TRIAL_ONE_CONFIG.validObjects.forEach((item) => {
+                const holder = document.createElement('div');
+                holder.className = 'observation-object fallback';
+                holder.style.left = item.x;
+                holder.style.top = item.y;
+                holder.dataset.id = item.id;
+
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.alt = item.label;
+                img.addEventListener('load', () => holder.classList.remove('fallback'));
+                img.addEventListener('error', () => holder.classList.add('fallback'));
+
+                const fallback = document.createElement('div');
+                fallback.className = 'fallback-label';
+                fallback.textContent = item.label;
+
+                holder.appendChild(img);
+                holder.appendChild(fallback);
+                els.observationRoom.appendChild(holder);
+            });
+        }
+
+        function buildObjectOptions() {
+            const optionList = shuffleArray([
+                ...TRIAL_ONE_CONFIG.validObjects.map(({ id, label }) => ({ id, label })),
+                ...TRIAL_ONE_CONFIG.distractors
+            ]);
+
+            els.objectOptions.innerHTML = '';
+            optionList.forEach((option) => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.innerHTML = `
+                    <label>
+                        <input type="checkbox" value="${option.id}" />
+                        <span>${option.label}</span>
+                    </label>
+                `;
+                els.objectOptions.appendChild(card);
+            });
+        }
+
+        function startTrialOneSequence() {
+            clearTrialOneTimers();
+            clearArenaArtifacts();
+            trialOneRun.running = true;
+            trialOneRun.flashes = 0;
+            els.startTrialOne.disabled = true;
+            els.replayTrialOne.classList.add('hidden');
+            els.flashSequenceStatus.textContent = 'Active';
+            els.witnessPrompt.textContent = 'Observe Carefully';
+            els.flashArena.classList.add('running');
+            els.trialOneFormStage.classList.add('hidden');
+            showAegisMessage('Witness sequence initiated.');
+
+            const start = performance.now();
+            const loop = () => {
+                const now = performance.now();
+                if (now - start >= TRIAL_ONE_CONFIG.flashDurationMs) {
+                    finishTrialOneSequence();
+                    return;
+                }
+                createFlashDot();
+                trialOneRun.flashes += 1;
+                const delay = randomBetween(260, 760);
+                const id = window.setTimeout(loop, delay);
+                trialOneRun.timeoutIds.push(id);
+            };
+
+            loop();
+        }
+
+        function createFlashDot() {
+            const dot = document.createElement('div');
+            dot.className = 'flash-dot';
+            const size = randomBetween(8, 24);
+            const x = randomBetween(4, 94);
+            const y = randomBetween(8, 88);
+            const hue = randomBetween(34, 56);
+            const sat = randomBetween(48, 88);
+            const light = randomBetween(62, 82);
+            dot.style.width = `${size}px`;
+            dot.style.height = `${size}px`;
+            dot.style.left = `${x}%`;
+            dot.style.top = `${y}%`;
+            dot.style.background = `radial-gradient(circle at center, hsla(${hue}, ${sat}%, ${light}%, 0.95), hsla(${hue}, ${sat}%, ${light - 8}%, 0.12) 68%, transparent 100%)`;
+            els.flashArena.appendChild(dot);
+            window.setTimeout(() => dot.remove(), 600);
+        }
+
+        function finishTrialOneSequence() {
+            state.trial1.flashCountActual = trialOneRun.flashes;
+            saveState();
+            els.whiteFlash.classList.add('active');
+            const flashId = window.setTimeout(() => {
+                els.whiteFlash.classList.remove('active');
+                els.observationRoom.classList.add('visible');
+                els.sigilGhost.classList.add('active');
+            }, 170);
+            const hideId = window.setTimeout(() => {
+                els.observationRoom.classList.remove('visible');
+                els.sigilGhost.classList.remove('active');
+                els.flashArena.classList.remove('running');
+                els.flashSequenceStatus.textContent = 'Sequence Complete';
+                els.witnessPrompt.textContent = 'Account Required';
+                els.trialOneFormStage.classList.remove('hidden');
+                els.replayTrialOne.classList.remove('hidden');
+                els.startTrialOne.disabled = false;
+                trialOneRun.running = false;
+                showAegisMessage('The room has withdrawn. Record what remains.');
+            }, TRIAL_ONE_CONFIG.revealDurationMs + 220);
+            trialOneRun.timeoutIds.push(flashId, hideId);
+        }
+
+        function clearTrialOneTimers() {
+            trialOneRun.timeoutIds.forEach((id) => clearTimeout(id));
+            trialOneRun.timeoutIds = [];
+        }
+
+        function clearArenaArtifacts() {
+            els.flashArena.querySelectorAll('.flash-dot').forEach((dot) => dot.remove());
+            els.whiteFlash.classList.remove('active');
+            els.observationRoom.classList.remove('visible');
+            els.sigilGhost.classList.remove('active');
+            els.flashArena.classList.remove('running');
+            els.startTrialOne.disabled = false;
+        }
+
+        function clearTrialOneForm() {
+            els.flashCountInput.value = '';
+            els.objectOptions.querySelectorAll('input[type="checkbox"]').forEach((input) => { input.checked = false; });
+        }
+
+        function handleTrialOneSubmit(event) {
+            event.preventDefault();
+            const guessedCount = els.flashCountInput.value.trim();
+            const selectedIds = [...els.objectOptions.querySelectorAll('input:checked')].map((input) => input.value);
+
+            state.trial1.flashCountGuess = guessedCount;
+            state.trial1.selectedObjectIds = selectedIds;
+            state.trial1.submitted = true;
+
+            const actual = state.trial1.flashCountActual ?? trialOneRun.flashes ?? 0;
+            const validIds = new Set(TRIAL_ONE_CONFIG.validObjects.map((item) => item.id));
+            const correctSelections = selectedIds.filter((id) => validIds.has(id)).length;
+            const falseSelections = selectedIds.filter((id) => !validIds.has(id)).length;
+            const missing = TRIAL_ONE_CONFIG.validObjects.length - correctSelections;
+            const countDelta = guessedCount === '' ? 999 : Math.abs(Number(guessedCount) - actual);
+
+            let verdict = 'Distorted Recall';
+            let modifier = 0;
+            let scoreBand = 'poor';
+
+            if (guessedCount === '' && selectedIds.length === 0) {
+                verdict = 'Unwitnessed';
+                modifier = -6;
+                scoreBand = 'poor';
+            } else if (countDelta === 0 && correctSelections === TRIAL_ONE_CONFIG.validObjects.length && falseSelections === 0) {
+                verdict = 'Perfect Recall';
+                modifier = 18;
+                scoreBand = 'excellent';
+            } else {
+                const score = (correctSelections * 10) - (falseSelections * 6) - (missing * 3) - Math.min(countDelta, 8) * 2;
+                if (score >= 48) {
+                    verdict = 'Partial Recall';
+                    modifier = 8;
+                    scoreBand = 'moderate';
+                } else {
+                    verdict = 'Distorted Recall';
+                    modifier = -2;
+                    scoreBand = 'poor';
+                }
+            }
+
+            state.trial1.verdict = verdict;
+            state.trial1.modifier = modifier;
+            state.trial1.scoreBand = scoreBand;
+            state.trial2.unlocked = true;
+            if (!state.trial2.verdict || state.trial2.verdict === 'Locked') state.trial2.verdict = 'Available';
+            saveState();
+
+            unlockTrialTwo(true);
+            renderTrialOneVerdict();
+            updateMonitor();
+        }
+
+        function renderTrialOneVerdict() {
+            if (!state.trial1.verdict) return;
+            els.trialOneVerdictBox.classList.remove('hidden');
+            els.trialOneVerdictTitle.textContent = state.trial1.verdict;
+            els.trialOneVerdictCopy.textContent = verdictCopy.trial1[state.trial1.verdict];
+            els.trialOneQuickVerdict.textContent = state.trial1.verdict;
+            els.fragmentOneFooter.textContent = state.trial1.verdict;
+        }
+
+        function unlockTrialTwo(withMessage) {
+            els.startTrialTwo.disabled = false;
+            els.trialTwoPill.textContent = 'Available';
+            els.trialTwoPill.classList.remove('locked');
+            if (withMessage) showAegisMessage('The Amber Gambler acknowledges your witness account.');
+        }
+
+        function startTrialTwo() {
+            if (!state.trial2.unlocked) return;
+            resetTrialTwoState(false);
+            state.trial2.started = true;
+            state.trial2.startTime = Date.now();
+            state.trial2.board = buildDeck();
+            saveState();
+            renderTrialTwoBoard();
+            els.trialTwoBoardStage.classList.remove('hidden');
+            els.resetTrialTwo.classList.remove('hidden');
+            startTrialTwoClock();
+            showAegisMessage('Ten likenesses. One remnant. Clear the known.');
+            updateMonitor();
+        }
+
+        function resetTrialTwoState(fullReset) {
+            stopTrialTwoClock();
+            firstCard = null;
+            secondCard = null;
+            lockBoard = false;
+            state.trial2.started = false;
+            state.trial2.completed = false;
+            state.trial2.pairsCleared = 0;
+            state.trial2.mismatches = 0;
+            state.trial2.moves = 0;
+            state.trial2.elapsedMs = 0;
+            state.trial2.startTime = null;
+            state.trial2.residualValue = null;
+            state.trial2.augury = false;
+            state.trial2.prudence = 'None';
+            state.trial2.aegisScore = null;
+            state.trial2.board = fullReset ? [] : state.trial2.board;
+            state.trial2.verdict = state.trial2.unlocked ? 'Available' : 'Locked';
+            els.residualBox.classList.add('hidden');
+            els.offerBox.classList.add('hidden');
+            els.wagerBox.classList.add('hidden');
+            els.trialTwoVerdictBox.classList.add('hidden');
+            els.aegisScore.textContent = '--';
+            if (fullReset) saveState();
+            updateMonitor();
+        }
+
+        function buildDeck() {
+            const pairValues = shuffleArray([1,2,3,4,5,6,7,8,9,10]);
+            const cards = [];
+            pairValues.forEach((value, index) => {
+                const label = `Pair ${value}`;
+                cards.push({ id: `pair-${index}-a`, value, label, matched: false, revealed: false, residual: false });
+                cards.push({ id: `pair-${index}-b`, value, label, matched: false, revealed: false, residual: false });
+            });
+            cards.push({ id: 'residual-lock', value: null, label: 'Residual Card', matched: false, revealed: false, residual: true });
+            return shuffleArray(cards);
+        }
+
+        function getCardFacePath(value) {
+            return TRIAL_TWO_CONFIG.cardFacePaths[value] || '';
+        }
+
+        function renderCardImageMarkup(src, alt, fallbackValue) {
+            return `
+                <div class="card-face-shell">
+                    <img class="card-art" src="${src}" alt="${alt}" draggable="false" onerror="this.style.display='none'; this.nextElementSibling.style.opacity='1';" />
+                    <span class="card-fallback-value">${fallbackValue}</span>
+                </div>
+            `;
+        }
+
+        function renderCardBackMarkup(card) {
+            const badge = card.residual
+                ? '<span class="card-overlay-badge">Residual Sealed</span>'
+                : '<span class="card-overlay-badge subtle">Amber Deck</span>';
+            return `
+                <div class="card-face-shell">
+                    <img class="card-art" src="${TRIAL_TWO_CONFIG.cardBackPath}" alt="" aria-hidden="true" draggable="false" />
+                    ${badge}
+                </div>
+            `;
+        }
+
+        function renderCardFrontMarkup(card) {
+            const value = card.residual ? (state.trial2.residualValue ?? '—') : card.value;
+            const src = typeof value === 'number' ? getCardFacePath(value) : '';
+            if (!src) {
+                return `
+                    <div class="card-face-shell">
+                        <span class="card-fallback-value" style="opacity:1; inset:8px;">${value}</span>
+                    </div>
+                `;
+            }
+            return renderCardImageMarkup(src, `Amber card value ${value}`, value);
+        }
+
+        function renderTrialTwoBoard() {
+            els.cardGrid.innerHTML = '';
+            if (!state.trial2.board.length) return;
+            state.trial2.board.forEach((card) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = `memory-card${card.revealed ? ' revealed' : ''}${card.matched ? ' matched' : ''}${card.residual ? ' residual-lock' : ''}${card.residual && state.trial2.residualValue !== null ? ' active' : ''}`;
+                button.dataset.id = card.id;
+                button.innerHTML = `
+                    <span class="card-face card-back">${renderCardBackMarkup(card)}</span>
+                    <span class="card-face card-front">${renderCardFrontMarkup(card)}</span>
+                `;
+                if (!card.residual) {
+                    button.addEventListener('click', () => handleMemoryCardClick(card.id));
+                }
+                els.cardGrid.appendChild(button);
+            });
+            updateTrialTwoMetrics();
+        }
+
+        function handleMemoryCardClick(cardId) {
+            if (lockBoard || !state.trial2.started) return;
+            const card = state.trial2.board.find((entry) => entry.id === cardId);
+            if (!card || card.matched || card.revealed || card.residual) return;
+
+            card.revealed = true;
+            state.trial2.moves += 1;
+            renderTrialTwoBoard();
+
+            if (!firstCard) {
+                firstCard = card;
+                saveState();
+                return;
+            }
+
+            secondCard = card;
+            lockBoard = true;
+
+            if (firstCard.value === secondCard.value) {
+                window.setTimeout(() => {
+                    firstCard.matched = true;
+                    secondCard.matched = true;
+                    firstCard.revealed = false;
+                    secondCard.revealed = false;
+                    state.trial2.pairsCleared += 1;
+                    firstCard = null;
+                    secondCard = null;
+                    lockBoard = false;
+                    saveState();
+                    renderTrialTwoBoard();
+                    if (state.trial2.pairsCleared === 10) {
+                        completePairBoard();
+                    }
+                }, 420);
+            } else {
+                state.trial2.mismatches += 1;
+                window.setTimeout(() => {
+                    firstCard.revealed = false;
+                    secondCard.revealed = false;
+                    firstCard = null;
+                    secondCard = null;
+                    lockBoard = false;
+                    saveState();
+                    renderTrialTwoBoard();
+                }, 800);
+            }
+        }
+
+        function startTrialTwoClock() {
+            stopTrialTwoClock();
+            const startedAt = state.trial2.startTime || Date.now();
+            trialTwoTimerId = window.setInterval(() => {
+                state.trial2.elapsedMs = Date.now() - startedAt;
+                updateTrialTwoMetrics();
+            }, 100);
+        }
+
+        function stopTrialTwoClock() {
+            if (trialTwoTimerId) {
+                clearInterval(trialTwoTimerId);
+                trialTwoTimerId = null;
+            }
+        }
+
+        function updateTrialTwoMetrics() {
+            els.pairsCleared.textContent = `${state.trial2.pairsCleared} / 10`;
+            els.mismatchCount.textContent = `${state.trial2.mismatches}`;
+            const seconds = ((state.trial2.elapsedMs || 0) / 1000).toFixed(1);
+            els.trialTwoTime.textContent = `${seconds}s`;
+        }
+
+        function completePairBoard() {
+            stopTrialTwoClock();
+            state.trial2.started = false;
+            state.trial2.completed = true;
+            state.trial2.elapsedMs = Date.now() - (state.trial2.startTime || Date.now());
+            state.trial2.residualValue = chooseResidualValue();
+            const residualCard = state.trial2.board.find((card) => card.residual);
+            if (residualCard) residualCard.value = state.trial2.residualValue;
+            saveState();
+            renderTrialTwoBoard();
+            renderResidualOutcome();
+            updateMonitor();
+        }
+
+        function chooseResidualValue() {
+            const seconds = (state.trial2.elapsedMs || 1) / 1000;
+            const timeScore = Math.max(0, 55 - Math.min(seconds, 55));
+            const mismatchPenalty = state.trial2.mismatches * 6;
+            const movePenalty = Math.max(0, (state.trial2.moves - 20) * 1.8);
+            const baseScore = 45 + timeScore - mismatchPenalty - movePenalty + (state.trial1.modifier || 0);
+            let band = 'poor';
+            if (baseScore >= 58) band = 'excellent';
+            else if (baseScore >= 34) band = 'moderate';
+            const choices = residualBands[band];
+            return choices[Math.floor(Math.random() * choices.length)];
+        }
+
+        function renderResidualOutcome() {
+            els.residualBox.classList.remove('hidden');
+            els.residualValue.textContent = state.trial2.residualValue;
+
+            if (state.trial2.residualValue > 9) {
+                els.residualCopy.textContent = 'A favourable remnant remains. The Hall offers an Amber Augury to those willing to test appetite against judgement.';
+                els.offerBox.classList.remove('hidden');
+                els.offerCopy.textContent = 'Amber Augury offered. If you play your hand against the Aegis and prevail, the omen is entered into your journal. Ties favour the Aegis.';
+                showAegisMessage('A favourable remnant remains. Will you wager it?');
+            } else {
+                state.trial2.verdict = 'No Offer Extended';
+                state.trial2.augury = false;
+                state.trial2.prudence = 'None';
+                saveState();
+                els.offerBox.classList.add('hidden');
+                showTrialTwoVerdict('No Offer Extended', verdictCopy.trial2['No Offer Extended']);
+                showAegisMessage('No augury has been extended.');
+            }
+        }
+
+        function refuseAugury() {
+            state.trial2.verdict = 'Withheld by Choice';
+            state.trial2.augury = false;
+            state.trial2.prudence = 'Recorded';
+            state.trial2.aegisScore = null;
+            saveState();
+            els.offerBox.classList.add('hidden');
+            els.wagerBox.classList.add('hidden');
+            showTrialTwoVerdict('Withheld by Choice', verdictCopy.trial2['Withheld by Choice']);
+            showAegisMessage('Restraint recorded.');
+        }
+
+        function resolveAegisWager() {
+            const player = state.trial2.residualValue;
+            const aegis = randomBetween(8, 13);
+            state.trial2.aegisScore = aegis;
+            els.wagerBox.classList.remove('hidden');
+            els.aegisScore.textContent = aegis;
+
+            if (player > aegis) {
+                state.trial2.verdict = 'Secured';
+                state.trial2.augury = true;
+                state.trial2.prudence = 'Variance';
+                els.wagerCopy.textContent = 'Your hand surpassed the Aegis score. The Amber Augury remains with you.';
+                showTrialTwoVerdict('Secured', verdictCopy.trial2['Secured']);
+                showAegisMessage('Variance accepted.');
+            } else {
+                state.trial2.verdict = 'Forfeited';
+                state.trial2.augury = false;
+                state.trial2.prudence = 'None';
+                els.wagerCopy.textContent = 'The Aegis score held. Invitation has been corrected into loss.';
+                showTrialTwoVerdict('Forfeited', verdictCopy.trial2['Forfeited']);
+                showAegisMessage('Appetite exceeded judgement.');
+            }
+
+            els.offerBox.classList.add('hidden');
+            saveState();
+        }
+
+        function showTrialTwoVerdict(title, copy) {
+            els.trialTwoVerdictBox.classList.remove('hidden');
+            els.trialTwoVerdictTitle.textContent = title;
+            els.trialTwoVerdictCopy.textContent = copy;
+            updateMonitor();
+        }
+
+        function renderTrialTwoOutcome() {
+            if (state.trial2.residualValue !== null) {
+                els.residualBox.classList.remove('hidden');
+                els.residualValue.textContent = state.trial2.residualValue;
+                els.residualCopy.textContent = state.trial2.residualValue > 9
+                    ? 'A favourable remnant remains. The Hall has already issued its invitation.'
+                    : 'The Hall left no favourable omen behind.';
+            }
+            if (state.trial2.verdict === 'Secured' || state.trial2.verdict === 'Forfeited') {
+                els.wagerBox.classList.remove('hidden');
+                els.aegisScore.textContent = state.trial2.aegisScore ?? '--';
+                els.wagerCopy.textContent = state.trial2.verdict === 'Secured'
+                    ? 'Your hand surpassed the Aegis score. The Amber Augury remains with you.'
+                    : 'The Aegis score held. Invitation has been corrected into loss.';
+            }
+            if (state.trial2.verdict === 'Withheld by Choice') {
+                els.offerBox.classList.add('hidden');
+                els.wagerBox.classList.add('hidden');
+            }
+            if (state.trial2.verdict && verdictCopy.trial2[state.trial2.verdict]) {
+                showTrialTwoVerdict(state.trial2.verdict, verdictCopy.trial2[state.trial2.verdict]);
+            }
+        }
+
+        function updateMonitor() {
+            els.monitorTrial1Status.textContent = state.trial1.verdict || 'Awaiting Witness';
+            els.monitorTrial2Status.textContent = state.trial2.unlocked ? (state.trial2.verdict || 'Available') : 'Locked';
+            els.monitorAuguryStatus.textContent = state.trial2.augury ? 'Secured' : 'Unclaimed';
+
+            els.sideTrialOne.textContent = state.trial1.verdict || 'None';
+            els.sideTrialTwo.textContent = state.trial2.unlocked ? (state.trial2.verdict || 'Available') : 'Locked';
+            els.sideAugury.textContent = state.trial2.augury ? 'Yes' : 'No';
+            els.sidePrudence.textContent = state.trial2.prudence || 'None';
+
+            els.trialOnePill.textContent = state.trial1.verdict ? 'Recorded' : 'Available';
+            els.trialTwoPill.textContent = state.trial2.unlocked ? 'Available' : 'Locked';
+            els.trialTwoPill.classList.toggle('locked', !state.trial2.unlocked);
+
+            els.fragmentTwoFooter.textContent = state.trial2.verdict || 'Wager Not Initiated';
+            els.fragmentThreeFooter.textContent = state.trial2.augury ? 'Amber Augury Secured' : 'Thread Retained';
+
+            if (state.trial1.verdict || state.trial2.verdict) {
+                const lines = [];
+                if (state.trial1.verdict) lines.push(`Trial I: ${state.trial1.verdict}.`);
+                if (state.trial2.unlocked) lines.push(`Trial II: ${state.trial2.verdict}.`);
+                if (state.trial2.augury) lines.push('Amber Augury entered into journal.');
+                else if (state.trial2.prudence === 'Recorded') lines.push('Restraint marker retained in lieu of omen.');
+                else if (state.trial2.verdict === 'Forfeited') lines.push('The offered omen was lost to the Aegis.');
+                els.journalFragmentCopy.textContent = lines.join(' ');
+            }
+
+            if (state.trial2.augury) {
+                els.monitorObserverStatus.textContent = 'Marked';
+            } else if (state.trial1.verdict === 'Unwitnessed') {
+                els.monitorObserverStatus.textContent = 'Questioned';
+            } else {
+                els.monitorObserverStatus.textContent = 'Recognised';
+            }
+        }
+
+        function resetHallProgress() {
+            clearTrialOneTimers();
+            stopTrialTwoClock();
+            localStorage.removeItem(STORAGE_KEY);
+            const journal = JSON.parse(localStorage.getItem(JOURNAL_KEY) || '{}');
+            delete journal.hallucigenesis;
+            localStorage.setItem(JOURNAL_KEY, JSON.stringify(journal));
+            location.reload();
+        }
+
+        function initAegisEye() {
+            document.addEventListener('mousemove', (event) => {
+                const rect = els.aegisEye.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const dx = (event.clientX - centerX) / rect.width;
+                const dy = (event.clientY - centerY) / rect.height;
+                const maxX = 11;
+                const maxY = 7;
+                const tx = Math.max(-maxX, Math.min(maxX, dx * 20));
+                const ty = Math.max(-maxY, Math.min(maxY, dy * 16));
+                els.aegisPupil.style.transform = `translate(${tx}px, ${ty}px)`;
+            });
+
+            setInterval(() => {
+                els.aegisEye.classList.add('blink');
+                setTimeout(() => els.aegisEye.classList.remove('blink'), 180);
+            }, 5200);
+        }
+
+        function showAegisMessage(message) {
+            els.aegisMessage.textContent = message;
+            els.aegisMessage.classList.add('visible');
+            els.aegisEye.classList.add('focused');
+            clearTimeout(showAegisMessage.timeoutId);
+            showAegisMessage.timeoutId = setTimeout(() => {
+                els.aegisMessage.classList.remove('visible');
+                els.aegisEye.classList.remove('focused');
+            }, 2600);
+        }
+
+        function shuffleArray(array) {
+            const clone = [...array];
+            for (let index = clone.length - 1; index > 0; index -= 1) {
+                const swapIndex = Math.floor(Math.random() * (index + 1));
+                [clone[index], clone[swapIndex]] = [clone[swapIndex], clone[index]];
+            }
+            return clone;
+        }
+
+        function randomBetween(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+    </script>
+</body>
+</html>
