@@ -17,7 +17,7 @@ video.addEventListener('playing',()=>{if(departed){video.pause();return}video.hi
 reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches){video.pause();play.hidden=!configured;play.textContent='Play docking sequence';}});
 try{
  const controller=new AbortController();timer=setTimeout(()=>controller.abort(),4000);
- const response=await fetch('/assets/video/arrival.json',{signal:controller.signal});clearTimeout(timer);if(!response.ok)throw new Error('No visual configuration');const config=await response.json();
+ const response=await fetch('/assets/video/arrival.json',{signal:controller.signal,cache:'no-store'});clearTimeout(timer);if(!response.ok)throw new Error('No visual configuration');const config=await response.json();
  if(!departed){if(config.src){configured=true;video.src=config.src;if(reducedMotion.matches){play.hidden=false;status.textContent='Docking sequence ready. Play when ready, or continue to the Docking Bay.';}else await startVideo();}else preview();}
 }catch{if(!departed)preview();}
 window.addEventListener('pagehide',()=>{departed=true;clearTimeout(timer);video.pause();});
