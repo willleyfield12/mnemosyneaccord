@@ -1,5 +1,5 @@
 // Checkpoint presentation only; the Cloudflare service validates every grant.
-export function createCheckpoints({getState,change,show,button,element,close,request}) {
+export function createCheckpoints({getState,change,show,button,element,close,request,navigate=path=>window.location.assign(path)}) {
  const draftKey=()=> 'aegis-draft-v2-'+(getState().runId||'retained')+'-'+getState().level;
  const readDraft=()=>{try{return JSON.parse(sessionStorage.getItem(draftKey())||'{}')}catch{return {}}};
  const saveDraft=answer=>{try{sessionStorage.setItem(draftKey(),JSON.stringify(answer))}catch{}};
@@ -11,6 +11,7 @@ export function createCheckpoints({getState,change,show,button,element,close,req
  }
  function shuffled(options){const arr=[...options];for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
  async function rewards(){
+  if(getState().stage==='complete'){navigate('/vault-theta/');return;}
   const content=element('div');content.append(element('p','Retrieving retained entitlements…'));show(getState().stage==='complete'?'Vault Theta // Descent and rewards':'Daedalus // Retained story rewards',content,[button('Return to station',close)]);
   try {
    const result=await request('/api/rewards');content.replaceChildren();
@@ -93,7 +94,7 @@ export function createCheckpoints({getState,change,show,button,element,close,req
    input.name=field.id;input.setAttribute('aria-label',field.label);input.required=true;input.value=answer[field.id]||'';input.oninput=()=>{answer[field.id]=input.value;saveDraft(answer);};label.append(input);form.append(label);
   }
   const error=element('p','','error');error.setAttribute('role','status');const submit=element('button','Submit reconstruction');submit.type='submit';
-  form.append(error,submit);form.onsubmit=async e=>{e.preventDefault();submit.disabled=true;const oldKey=draftKey();try{if(await change('puzzle',{answer})){try{sessionStorage.removeItem(oldKey)}catch{}const updated=getState();if(updated.stage==='complete'){await rewards();return;}show('AEGIS // Access authorised',updated.transmissions.at(-1).body,[updated.level===6?witnessRoute():button('Consult next investigation',protocol),button('Return to exploration',close)]);}}finally{submit.disabled=false;}};
+  form.append(error,submit);form.onsubmit=async e=>{e.preventDefault();submit.disabled=true;const oldKey=draftKey();try{if(await change('puzzle',{answer})){try{sessionStorage.removeItem(oldKey)}catch{}const updated=getState();if(updated.stage==='complete'){navigate('/vault-theta/?descent=1');return;}show('AEGIS // Access authorised',updated.transmissions.at(-1).body,[updated.level===6?witnessRoute():button('Consult next investigation',protocol),button('Return to exploration',close)]);}}finally{submit.disabled=false;}};
   content.append(form);
   const hints=element('section',undefined,'checkpoint-hints');hints.append(element('h3','Optional assistance'),element('p','Hints 1 and 2 preserve Unassisted Witness recognition. Revealing the worked solution marks this run as assisted; all story rewards remain available.'));
   const hintText=element('div');for(const [i,text] of (def.hintText||[]).entries())hintText.append(element('p','Hint '+(i+1)+': '+text));hints.append(hintText);

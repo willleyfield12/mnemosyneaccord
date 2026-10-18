@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vault Theta // The Mnemosyne Accord</title>
+<link rel="stylesheet" href="/css/protocol.css?v=uppercase-titles">
+<link rel="stylesheet" href="/css/docking-hub.css?v=entrance-20261018">
+<link rel="stylesheet" href="/css/scene-audio.css?v=deck-sound-1">
+<link rel="stylesheet" href="/css/vault-theta.css?v=vault-flow-1">
+<script>if(new URLSearchParams(location.search).get('descent')==='1'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('descent-loading');window.vaultLoadFallback=setTimeout(function(){document.documentElement.classList.remove('descent-loading')},4000)}</script>
+</head>
+<body class="vault-theta" data-sound-scene="d8_cupola">
+<img class="vault-backdrop" src="/assets/vault-theta/vault-theta-final.webp" alt="Blue-lit rock tunnel approaching the circular entrance to Vault Theta">
+<div class="vault-shade" aria-hidden="true"></div>
+<div id="vault-final">
+<header class="dock-header"><a href="/" class="series-link">THE MNEMOSYNE ACCORD</a><span>BOOK I // OBLIVIA</span></header>
+<main class="vault-layout">
+<section class="vault-caption" aria-labelledby="vault-title"><p class="eyebrow">EUROPA // BELOW THE ICE</p><h1 id="vault-title" tabindex="-1">VAULT THETA</h1><p>What endures has found its witness.</p><button id="replay-descent" class="vault-replay" type="button">Replay drop-pod sequence</button></section>
+<div class="vault-pad-column">
+<aside class="datapad" aria-labelledby="vault-pad-title">
+<div class="pad-hardware"><span>DAEDALUS // FIELD TERMINAL</span><span class="pad-light" aria-label="Terminal active"></span></div>
+<div class="pad-screen">
+<p class="eyebrow">MEMORY INFRASTRUCTURE</p><h2 id="vault-pad-title">The retained<br>record</h2><p class="pad-clearance">VAULT THETA // DESTINATIONS</p>
+<p class="pad-copy">Choose a record. Finishing-order rewards await verification.</p>
+<nav class="vault-destinations" aria-label="Vault Theta datapad">
+<button type="button" data-destination="signed"><span class="record-number">01</span><span><strong>Order signed Book 1</strong><small>First past the post</small></span><span aria-hidden="true">↗</span></button>
+<button type="button" data-destination="prologue"><span class="record-number">02</span><span><strong>Access the PROLOGUE</strong><small>Top ten finishers</small></span><span aria-hidden="true">↗</span></button>
+<button type="button" data-destination="teaser"><span class="record-number">03</span><span><strong>Chapter 1 teaser</strong><small>Later arrivals</small></span><span aria-hidden="true">↗</span></button>
+<button type="button" data-destination="fame"><span class="record-number">04</span><span><strong>Hall of Fame</strong><small>The Top Ten board</small></span><span aria-hidden="true">↗</span></button>
+</nav>
+<div class="vault-memory-actions"><button type="button" data-destination="forget"><strong>FORGET</strong><small>Unsubscribe</small></button><button type="button" data-destination="remember"><strong>REMEMBER</strong><small>Leave a book review</small></button></div>
+</div><div class="pad-base" aria-hidden="true"><span></span><i></i><span></span></div>
+</aside>
+<div data-scene-audio></div>
+</div>
+</main>
+</div>
+<section id="descent" class="descent-overlay" aria-label="Drop-pod descent to Vault Theta" hidden>
+<video id="descent-video" playsinline muted preload="metadata" poster="/assets/vault-theta/arrival-source.png" aria-label="Drop-pod descent and hatch opening at Vault Theta"><source src="/assets/vault-theta/kepler-to-vault.mp4" type="video/mp4"></video>
+<div class="descent-header"><a href="/" class="series-link">THE MNEMOSYNE ACCORD</a><span>TRANSFER POD // VAULT THETA</span></div>
+<div class="descent-controls"><button id="video-sound" type="button" aria-pressed="false">Video sound: off</button><button id="descent-play" type="button" hidden>Play descent</button><button id="skip-descent" type="button">Continue to Vault Theta →</button></div>
+</section>
+<p id="vault-status" class="vault-status" role="status" aria-live="polite"></p>
+<dialog id="vault-destination" aria-labelledby="destination-title"><p class="eyebrow">DAEDALUS // RETAINED RECORD</p><h2 id="destination-title"></h2><p id="destination-copy"></p><form method="dialog"><button class="primary" type="submit">Return to Vault Theta</button></form></dialog>
+<noscript><style>#replay-descent,[data-scene-audio]{display:none}</style><p class="no-script-note">The Vault Theta destination controls require JavaScript.</p></noscript>
+<script type="module" src="/assets/js/vault-theta.js?v=vault-flow-1"></script>
+<script type="module" src="/assets/js/scene-audio.js?v=vault-flow-1"></script>
+</body></html>
