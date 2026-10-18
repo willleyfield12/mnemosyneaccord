@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/css/docking-hub.css?v=datapad-consistent-2">
 </head>
 <body class="docking-hub">
-<script>document.body.classList.add('arrival-loading');window.dockArrivalFallback=setTimeout(function(){document.body.classList.remove('arrival-loading');document.querySelectorAll('[data-arrival-gated]').forEach(function(el){el.inert=false});},15000);</script>
+<script>document.body.classList.add('arrival-loading');try{if(sessionStorage.getItem('arg-docking-handoff')){document.body.classList.add('docking-handoff');sessionStorage.removeItem('arg-docking-handoff')}}catch{}window.dockArrivalFallback=setTimeout(function(){document.body.classList.remove('arrival-loading');document.querySelectorAll('[data-arrival-gated]').forEach(function(el){el.inert=false});},15000);</script>
 <button id="skip-arrival" class="skip-arrival" type="button" hidden>Skip arrival sequence →</button>
 <p id="arrival-status" class="arrival-sr" role="status" aria-live="polite"></p>
 <header class="dock-header"><a href="/" class="series-link">THE MNEMOSYNE ACCORD</a><span>BOOK I // OBLIVIA</span></header>
@@ -49,5 +49,6 @@
 </dialog>
 <script src="/assets/js/docking-arrival.js?v=datapad-consistent-2"></script>
 <script type="module" src="/assets/js/docking-hub.js?v=hall-access-10"></script>
+<script defer src="/assets/js/scene-audio.js"></script>
 </body>
 </html>

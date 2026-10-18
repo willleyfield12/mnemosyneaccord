@@ -1,0 +1,21 @@
+/* Audio is created/resumed only by an explicit user gesture on each page. */
+(()=>{'use strict';
+ const panel=document.createElement('aside');panel.className='scene-audio';panel.setAttribute('aria-label','Scene audio controls');
+ panel.innerHTML='<button type="button" aria-pressed="false">Enable ambience</button><label>Volume <input aria-label="Ambience volume" type="range" min="0" max="100" value="25"></label><label><input type="checkbox"> Whispered names</label><span role="status" class="audio-status"></span>';
+ document.body.append(panel);
+ const style=document.createElement('style');style.textContent='.scene-audio{position:fixed;right:18px;top:76px;z-index:4;display:flex;flex-wrap:wrap;align-items:center;gap:10px;max-width:calc(100vw - 36px);padding:10px 12px;color:#d6e8e7;background:rgba(2,6,8,.9);border:1px solid #657c7e;font:12px monospace}.scene-audio button{background:#081317;color:inherit;border:1px solid #657c7e;padding:8px;cursor:pointer}.scene-audio label{display:flex;align-items:center;gap:5px}.scene-audio input[type=range]{width:70px}.scene-audio :focus-visible{outline:3px solid #e8c997;outline-offset:3px}.audio-status:empty{display:none}@media(max-width:650px){.scene-audio{top:90px;font-size:11px}}';document.head.append(style);
+ const [toggle,range,whispers]=panel.querySelectorAll('button,input');const message=panel.querySelector('[role=status]');
+ let ctx,master,enabled=false,timer,utterance;const voices=['Ophelia','Naoko','Ezra','Martha','Vargo'];
+ try{range.value=localStorage.getItem('arg-audio-volume')||25}catch{}
+ function volume(){return Number(range.value)/100*.32}
+ function tone(freq,duration,level,type='sine'){const o=ctx.createOscillator(),g=ctx.createGain(),t=ctx.currentTime;o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(level,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g).connect(master);o.start();o.stop(t+duration+.05)}
+ function hiss(){const b=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate),data=b.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1);const n=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),g=ctx.createGain(),t=ctx.currentTime;n.buffer=b;filter.type='bandpass';filter.frequency.value=700;filter.Q.value=.65;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.055,t+.5);g.gain.linearRampToValueAtTime(0,t+2);n.connect(filter).connect(g).connect(master);n.start();n.stop(t+2)}
+ function cycle(){if(!enabled||document.hidden)return;tone(38+Math.random()*18,1.8,.16);if(Math.random()<.65)hiss();for(let i=0;i<8;i++)setTimeout(()=>{if(enabled&&!document.hidden)tone(500+Math.random()*1700,.035,.018,'triangle')},i*47);
+ if(whispers.checked&&'speechSynthesis'in window&&Math.random()<.22&&!speechSynthesis.speaking){utterance=new SpeechSynthesisUtterance(voices[Math.floor(Math.random()*voices.length)]);utterance.volume=Number(range.value)/100*.12;utterance.rate=.65;utterance.pitch=.7;speechSynthesis.speak(utterance)}
+ timer=setTimeout(cycle,2600+Math.random()*5200)}
+ function stop(){enabled=false;clearTimeout(timer);if(ctx)ctx.suspend();if(utterance&&'speechSynthesis'in window)speechSynthesis.cancel();toggle.textContent='Enable ambience';toggle.setAttribute('aria-pressed','false')}
+ toggle.addEventListener('click',async()=>{if(enabled){stop();return}try{const Audio=window.AudioContext||window.webkitAudioContext;if(!ctx){ctx=new Audio();master=ctx.createGain();master.connect(ctx.destination)}master.gain.value=volume();await ctx.resume();enabled=true;toggle.textContent='Mute ambience';toggle.setAttribute('aria-pressed','true');message.textContent='';cycle()}catch{message.textContent='Audio unavailable in this browser.';stop()}});
+ range.addEventListener('input',()=>{if(master)master.gain.setTargetAtTime(volume(),ctx.currentTime,.05);try{localStorage.setItem('arg-audio-volume',range.value)}catch{}});
+ whispers.addEventListener('change',()=>{if(!whispers.checked&&utterance)speechSynthesis.cancel();if(whispers.checked)message.textContent='Names use a quiet synthetic voice; voice quality varies by browser.';else message.textContent=''});
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});window.addEventListener('pagehide',stop);
+})();

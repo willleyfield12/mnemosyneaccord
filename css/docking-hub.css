@@ -27,3 +27,5 @@
 .arrival-loading .pad-screen{min-height:480px}
 .pad-utilities a[href]{border:1px solid transparent;padding:6px;border-radius:3px}
 @media(prefers-reduced-motion:reduce){.dock-image,.datapad,.arrival-step,#enter-station{transition:none!important;filter:none!important;translate:none!important}}
+
+.docking-handoff.arrival-loading .dock-image:not(.arrival-visible){opacity:1;filter:none}
