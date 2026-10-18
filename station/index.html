@@ -6,7 +6,7 @@
 <title>Docking Bay // Daedalus Memory Archive</title>
 <link rel="stylesheet" href="/css/protocol.css?v=uppercase-titles">
 <link rel="stylesheet" href="/css/docking-hub.css?v=entrance-20261018">
-</head>
+<link rel="stylesheet" href="/css/scene-audio.css?v=deck-sound-1"></head>
 <body class="docking-hub">
 <script>document.body.classList.add('arrival-loading');try{if(sessionStorage.getItem('arg-docking-handoff')){document.body.classList.add('docking-handoff');sessionStorage.removeItem('arg-docking-handoff')}}catch{}window.dockArrivalFallback=setTimeout(function(){document.body.classList.remove('arrival-loading');document.querySelectorAll('[data-arrival-gated]').forEach(function(el){el.inert=false});},15000);</script>
 <button id="skip-arrival" class="skip-arrival" type="button" hidden>Skip arrival sequence →</button>
@@ -19,7 +19,7 @@
   <div class="dock-label"><p class="eyebrow">KEPLER III // DECK 6</p><h1>Primary Docking Bay</h1><p class="dock-caption">The clamps are holding. The station is waiting.</p></div>
   <div class="dock-entry"><p class="eyebrow">AEGIS // STATION ENTRY</p><h2>Your arrival has been noticed.</h2><p id="entry-copy">Enter the station, or consult the datapad before you present yourself.</p><button id="enter-station" class="primary" type="button">Enter Kepler III <span aria-hidden="true">→</span></button><p id="entry-note">AEGIS will request a transmission address before admitting you.</p><p id="status" class="error" role="status" aria-live="polite"></p></div>
  </section>
- <aside class="datapad" aria-labelledby="datapad-title">
+ <div class="dock-pad-column"><aside class="datapad" aria-labelledby="datapad-title">
   <div class="pad-hardware"><span>DAEDALUS // FIELD TERMINAL</span><span class="pad-light" aria-label="Terminal active"></span></div>
   <div class="pad-screen">
    <div id="pad-boot" hidden aria-label="Datapad operating system startup"><p>DAEDALUS // MEMORY OS</p><pre id="pad-boot-lines"></pre></div>
@@ -40,7 +40,7 @@
    <p class="pad-footnote">The archive is available before station entry. Restricted records respond to clearance.</p>
   </div>
   <div class="pad-base" aria-hidden="true"><span></span><i></i><span></span></div>
- </aside>
+ </aside><div data-scene-audio></div></div>
 </main>
 <dialog id="detection" aria-labelledby="detection-title">
  <p class="eyebrow">AEGIS // DETECTION PROTOCOL</p><h2 id="detection-title">Submit or be forgotten.</h2><p>The docking seal requires a transmission address. Permit detection to enter Kepler III.</p>
@@ -49,6 +49,6 @@
 </dialog>
 <script src="/assets/js/docking-arrival.js?v=datapad-consistent-2"></script>
 <script type="module" src="/assets/js/docking-hub.js?v=hall-access-10"></script>
-<script defer src="/assets/js/scene-audio.js?v=entrance-20261018"></script>
-</body>
+
+<script type="module" src="/assets/js/scene-audio.js?v=deck-sound-1"></script></body>
 </html>

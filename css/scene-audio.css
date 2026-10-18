@@ -1,0 +1,15 @@
+/* A quiet utility row below the field terminal, never over the scene. */
+.scene-audio{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px 15px;padding:10px 4px 4px;color:#9bb8be;font:10px/1.5 'Courier New',monospace;letter-spacing:.6px;text-transform:uppercase}
+.scene-audio .scene-sound-toggle{display:inline-flex;align-items:center;gap:6px;width:auto;min-height:32px;margin:0;padding:5px 3px;border:0;border-radius:2px;background:transparent;box-shadow:none;color:#aac7cc;font:inherit;letter-spacing:inherit;text-transform:uppercase;cursor:pointer}
+.scene-audio .scene-sound-toggle:hover{background:transparent;color:#d8ebe8;text-decoration:underline;text-underline-offset:4px}
+.scene-audio .scene-volume{display:flex;align-items:center;gap:7px;width:auto;margin:0;font:inherit;color:inherit}
+.scene-audio input[type=range]{width:66px;height:24px;margin:0;padding:0;border:0;background:transparent;accent-color:#8baaa8;cursor:pointer}
+.scene-audio :focus-visible{outline:2px solid #e9c78b;outline-offset:4px}
+.scene-sound-status{width:100%;text-align:right;font-size:10px}.scene-sound-status:empty{display:none}
+.dock-pad-column,.field-pad-column{min-width:0}.dock-pad-column .datapad{width:100%}.field-pad-column{align-self:start}.field-pad-column>.walk-sidebar{width:100%;max-height:calc(100svh - 160px);overflow:auto}
+.walk-top .series-home{color:inherit;text-decoration:none}.walk-top .series-home:hover{text-decoration:underline;text-underline-offset:4px}
+.landing-sound-row{max-width:900px;margin:0 auto;padding:0 16px}.arrival-sound-row{position:relative;width:100%;justify-content:flex-start;padding:0}.arrival-sound-row .scene-sound-status{text-align:left}
+@media(max-width:850px){.field-pad-column{grid-column:1/-1}.field-pad-column>.walk-sidebar{max-height:none}.field-pad-column .manifest-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}}
+@media(max-width:650px){.scene-audio{font-size:10px;padding-right:3px}.field-pad-column .manifest-list{display:block}.field-pad-column>.walk-sidebar{display:block}}
+
+.field-pad-column>.walk-sidebar{padding:20px}.dock-pad-column{width:100%}@media(max-width:760px){.dock-pad-column{max-width:540px;justify-self:center}}

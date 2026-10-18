@@ -1182,7 +1182,7 @@
             }
         }
     </style>
-</head>
+<link rel="stylesheet" href="/css/scene-audio.css?v=deck-sound-1"></head>
 
 <body>
     <picture aria-hidden="true">
@@ -1268,11 +1268,11 @@
                     </section>
                 </div>
             </section>
+            <div class="landing-sound-row" data-scene-audio></div>
         </main>
         <footer class="footer">
             <div class="footer-left">THE AEGIS REMEMBERS.<br><span class="coordinate" id="environment">ENCRYPTED CHANNEL
-                    / 001</span></div><button class="sound" id="sound" aria-pressed="false">♫ &nbsp; AMBIENCE:
-                OFF</button>
+                    / 001</span></div>
         </footer>
     </div>
     <div class="boot" id="boot" hidden aria-label="Station terminal boot">
@@ -1410,8 +1410,6 @@
             const boot = $('#boot'), page = $('#page'); let timer, done = false; boot.hidden = false; page.inert = true;
             function enter() { if (done) return; done = true; clearTimeout(timer); try { localStorage.setItem('mnemosyne-visited', '1') } catch (e) { } boot.classList.add('out'); page.inert = false; $('#main').classList.add('reveal'); setTimeout(() => { boot.hidden = true }, reduce.matches ? 0 : 650) }
             $('#skip').onclick = () => { enter(); $('.orb').focus({ preventScroll: true }) }; let line = 0; function step() { if (done) return; $('#boot-text').textContent = lines.slice(0, ++line).join('\n'); if (line < lines.length) timer = setTimeout(step, reduce.matches ? 80 : line === 3 ? 1300 : 650); else timer = setTimeout(enter, returning ? 1500 : 950) } timer = setTimeout(step, 300);
-            // Synthesised station hum: created only in response to the sound button.
-            let audio, master, on = false; $('#sound').onclick = async () => { try { if (!audio) { const Audio = window.AudioContext || window.webkitAudioContext; if (!Audio) throw Error('unsupported'); audio = new Audio(); master = audio.createGain(); master.gain.value = 0; master.connect(audio.destination);[43, 64.6, 86.2, 129].forEach((f, i) => { const o = audio.createOscillator(), g = audio.createGain(); o.type = 'sine'; o.frequency.value = f; g.gain.value = .035 / (i + 1); o.connect(g).connect(master); o.start() }); const size = audio.sampleRate * 4, b = audio.createBuffer(1, size, audio.sampleRate), d = b.getChannelData(0); let last = 0; for (let i = 0; i < size; i++) { last = (last + .02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 2 } const n = audio.createBufferSource(), filter = audio.createBiquadFilter(), g = audio.createGain(); n.buffer = b; n.loop = true; filter.type = 'lowpass'; filter.frequency.value = 380; g.gain.value = .11; n.connect(filter).connect(g).connect(master); n.start() } await audio.resume(); on = !on; master.gain.setTargetAtTime(on ? .7 : 0, audio.currentTime, .4); $('#sound').setAttribute('aria-pressed', String(on)); $('#sound').textContent = '♫  AMBIENCE: ' + (on ? 'ON' : 'OFF') } catch (e) { $('#sound').textContent = 'AMBIENCE UNAVAILABLE'; $('#sound').disabled = true } }; document.addEventListener('visibilitychange', () => { if (audio) document.hidden ? audio.suspend() : on && audio.resume().catch(() => { }) });
             // The procedural fallback has no image or network dependency.
             document.querySelectorAll('.book-cover').forEach(img => { img.onload = () => { img.hidden = false; img.nextElementSibling.hidden = true }; img.onerror = () => { img.hidden = true; img.nextElementSibling.hidden = false }; if (img.complete && img.naturalWidth) { img.hidden = false; img.nextElementSibling.hidden = true } });
             const canvas = $('#scene'), ctx = canvas.getContext('2d'); if (!ctx) return; let w, h, dpr; const random = (a, b) => a + Math.random() * (b - a); const stars = Array.from({ length: 260 }, () => [Math.random(), Math.random(), random(.3, 1.2), random(.12, .7)]); const cracks = Array.from({ length: 34 }, () => Array.from({ length: 12 }, () => Math.random())); const col = (a = 1) => `rgba(${rgb.join(',')},${a})`; let angle = random(-.14, .14), phase = random(0, 6); function resize() { dpr = Math.min(devicePixelRatio || 1, 2); w = innerWidth; h = innerHeight; canvas.width = w * dpr; canvas.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); draw(0) }
@@ -1423,6 +1421,6 @@
             resize(); addEventListener('resize', resize); let glitchTimer; function glitch() { if (!reduce.matches && !document.hidden && intensity > .25) { $('.title').classList.add('flicker'); setTimeout(() => $('.title').classList.remove('flicker'), 230) } glitchTimer = setTimeout(glitch, 5000 + Math.random() * (22000 - intensity * 15000)) } glitch();
         })();
     </script>
-</body>
+<script type="module" src="/assets/js/scene-audio.js?v=deck-sound-1"></script></body>
 
 </html>

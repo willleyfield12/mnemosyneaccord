@@ -23,6 +23,27 @@ export function createCheckpoints({getState,change,show,button,element,close,req
    else if(result.descent) content.append(element('p','Vault Theta descent authorised. The descent video has not yet been attached to this terminal. Your completion is recorded.'));
   }catch(error){content.replaceChildren(element('p',error.message,'error'));}
  }
+ let approaching=false;
+ async function approachWitnessKey(){
+  if(approaching)return;
+  const state=getState();
+  if(state.level!==6||state.stage==='complete'||state.assessment?.checkpoint!==1)return;
+  approaching=true;
+  try{
+   // Use the normal movement endpoint: each stairwell step retains server clearance checks.
+   let current=getState();
+   if(!current.scene.endsWith('_corridor')){
+    const deck=Number(/^d(\d+)_/.exec(current.scene)?.[1]);
+    if(!deck||!await change('move',{scene:'d'+deck+'_corridor'}))return;
+   }
+   while(getState().scene!=='d1_corridor'){
+    const deck=Number(/^d(\d+)_/.exec(getState().scene)?.[1]);
+    if(!deck||deck<=1||!await change('move',{scene:'d'+(deck-1)+'_corridor'}))return;
+   }
+   open();
+  }finally{approaching=false;}
+ }
+ const witnessRoute=()=>button('Proceed to Deck 1 — Witness Key',approachWitnessKey);
  function protocol(){
   const state=getState(),def=state.assessment;
   if(!def){rewards();return;}
@@ -31,6 +52,7 @@ export function createCheckpoints({getState,change,show,button,element,close,req
   else content.append(element('p','No further offering or AEGIS protocol is required. Proceed to the Witness Key terminal.'));
   content.append(element('p','Terminal location: Deck '+def.checkpoint+' corridor.'));
   const controls=[button('Return to exploration',close)];
+  if(state.level===6)controls.unshift(witnessRoute());
   if(state.level<6)controls.unshift(button('Retain protocol',async()=>{if(await change('retain_protocol')){close();document.querySelector('#journal-entries').open=true;document.querySelector('#journal-entries').scrollIntoView({block:'nearest'});}}));
   show(def.title+' // Current investigation',content,controls);
  }
@@ -38,7 +60,7 @@ export function createCheckpoints({getState,change,show,button,element,close,req
   const state=getState(),def=state.assessment;
   if(state.stage==='complete'){rewards();return;}
   if(!def)return;
-  if(state.scene!=='d'+def.checkpoint+'_corridor'){show('AEGIS // Terminal location','Approach the terminal in the Deck '+def.checkpoint+' corridor to submit evidence or a reconstruction.',[button('Consult current directive',protocol),button('Return to exploration',close)]);return;}
+  if(state.scene!=='d'+def.checkpoint+'_corridor'){show('AEGIS // Terminal location','Approach the terminal in the Deck '+def.checkpoint+' corridor to submit evidence or a reconstruction.',[...(state.level===6?[witnessRoute()]:[]),button('Consult current directive',protocol),button('Return to exploration',close)]);return;}
   const content=element('div');content.className='checkpoint-terminal';
   if(state.stage==='hunt'){
    content.append(element('p','Select one copy of each requested specimen below. Your manifest and authenticated evidence are preserved on every attempt.'));
@@ -71,7 +93,7 @@ export function createCheckpoints({getState,change,show,button,element,close,req
    input.name=field.id;input.setAttribute('aria-label',field.label);input.required=true;input.value=answer[field.id]||'';input.oninput=()=>{answer[field.id]=input.value;saveDraft(answer);};label.append(input);form.append(label);
   }
   const error=element('p','','error');error.setAttribute('role','status');const submit=element('button','Submit reconstruction');submit.type='submit';
-  form.append(error,submit);form.onsubmit=async e=>{e.preventDefault();submit.disabled=true;const oldKey=draftKey();try{if(await change('puzzle',{answer})){try{sessionStorage.removeItem(oldKey)}catch{}const updated=getState();if(updated.stage==='complete'){await rewards();return;}show('AEGIS // Access authorised',updated.transmissions.at(-1).body,[button('Consult next investigation',updated.level===6?open:protocol),button('Return to exploration',close)]);}}finally{submit.disabled=false;}};
+  form.append(error,submit);form.onsubmit=async e=>{e.preventDefault();submit.disabled=true;const oldKey=draftKey();try{if(await change('puzzle',{answer})){try{sessionStorage.removeItem(oldKey)}catch{}const updated=getState();if(updated.stage==='complete'){await rewards();return;}show('AEGIS // Access authorised',updated.transmissions.at(-1).body,[updated.level===6?witnessRoute():button('Consult next investigation',protocol),button('Return to exploration',close)]);}}finally{submit.disabled=false;}};
   content.append(form);
   const hints=element('section',undefined,'checkpoint-hints');hints.append(element('h3','Optional assistance'),element('p','Hints 1 and 2 preserve Unassisted Witness recognition. Revealing the worked solution marks this run as assisted; all story rewards remain available.'));
   const hintText=element('div');for(const [i,text] of (def.hintText||[]).entries())hintText.append(element('p','Hint '+(i+1)+': '+text));hints.append(hintText);
